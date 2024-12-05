@@ -1,25 +1,49 @@
-<div class="container">
-    <h2>Customer List</h2>
-    <table class="table">
+<div class="container mx-auto p-4">
+  <h2 class="text-2xl font-semibold mb-4 text-gray-800">Customer List</h2>
+  <div class="shadow-lg rounded-lg bg-white p-4 overflow-x-auto">
+    <nz-table
+      nzShowSizeChanger
+      [nzData]="filteredCustomers"
+      [nzFrontPagination]="false"
+      [nzLoading]="loading"
+      [nzTotal]="total"
+      [nzPageSize]="pageSize"
+      [nzPageIndex]="pageIndex"
+      (nzQueryParams)="onQueryParamsChange($event)"
+    >
       <thead>
         <tr>
-          <th>Name</th>
-          <th>Email</th>
-          <th>Phone</th>
-          <th>Actions</th>
+          <th nzColumnKey="name" [nzSortFn]="true" [nzSortPriority]="true">Name</th>
+          <th nzColumnKey="category" [nzFilters]="filterCategories" [nzFilterFn]="false">Category</th>
+          <th nzColumnKey="preferences" [nzFilters]="filterPreferences" [nzFilterFn]="false">Preference</th>
+          <th nzColumnKey="email">Email</th>
+          <th nzColumnKey="phone">Phone</th>
+          <th nzColumnKey="address">Address</th>
+          <th nzColumnKey="action">Actions</th>
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let customer of customers">
+        <tr *ngFor="let customer of filteredCustomers">
           <td>{{ customer.name }}</td>
+          <td>{{ customer.category }}</td>
+          <td>{{ customer.preferences }}</td>
           <td>{{ customer.email }}</td>
           <td>{{ customer.phone }}</td>
-          <td>
-            <button (click)="viewCustomer(customer.id)" class="btn btn-primary">View</button>
-            <button (click)="deleteCustomer(customer.id)" class="btn btn-danger">Delete</button>
+          <td>{{ customer.address }}</td>
+          <td class="px-4 py-2 text-center space-x-5">
+            <button 
+              class="text-blue-500 hover:text-blue-700"
+              (click)="viewCustomer(customer.customerId)">
+              <i class="fas fa-eye"></i>
+            </button>
+            <button 
+              class="text-red-500 hover:text-red-700"
+              (click)="deleteCustomer(customer.customerId)">
+              <i class="fas fa-trash-alt"></i>
+            </button>
           </td>
         </tr>
       </tbody>
-    </table>
+    </nz-table>
   </div>
-  
+</div>
