@@ -42,7 +42,7 @@ export class SignupComponent {
     if (this.signupForm.valid) {
       const apiUrl = 'http://localhost:8080/api/auth/signup';
       this.http.post(apiUrl, this.signupForm.value).subscribe({
-        next: () => this.router.navigate(['/login']),
+        next: () => this.router.navigate(['/login'], {replaceUrl: true}),
         error: (err) => alert('Signup failed: ' + err.message)
       });
     }

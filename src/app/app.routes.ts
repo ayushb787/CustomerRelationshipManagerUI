@@ -6,13 +6,14 @@ import { CustomerListComponent } from './components/customer-list/customer-list.
 import { CustomerDetailComponent } from './components/customer-detail/customer-detail.component';
 import { CustomerCreateComponent } from './components/customer-create/customer-create.component';
 import { AuthGuard } from './guards/auth.guard';
+import { RedirectGuard } from './guards/redirect.guard'; // Import the RedirectGuard
 
 export const routes: Routes = [
-  { path: 'login', component: LoginComponent },
+  { path: 'login', component: LoginComponent, canActivate: [RedirectGuard] },  // Use RedirectGuard for login
   { path: 'signup', component: SignupComponent },
   { path: 'dashboard', component: DashboardComponent , canActivate: [AuthGuard] },
   { path: 'dashboard/customers', component: CustomerListComponent, canActivate: [AuthGuard] },
   { path: 'dashboard/customers/create', component: CustomerCreateComponent, canActivate: [AuthGuard] },
   { path: 'dashboard/customers/:id', component: CustomerDetailComponent, canActivate: [AuthGuard] },
-  { path: '', redirectTo: 'login', pathMatch: 'full' }
+  { path: '', redirectTo: '/login', pathMatch: 'full' }  // Default route that will be managed by RedirectGuard
 ];

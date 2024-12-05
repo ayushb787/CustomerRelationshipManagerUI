@@ -45,7 +45,7 @@ export class CustomerDetailComponent implements OnInit {
   updateCustomer(): void {
     if (this.customerId && this.token) {
       this.customerService.updateCustomer(this.customerId, this.customer).subscribe(() => {
-        this.router.navigate(['/dashboard/customers']);
+        this.router.navigate(['/dashboard/customers'], {replaceUrl: true});
       }, error => {
         console.error('Error updating customer', error);
       });

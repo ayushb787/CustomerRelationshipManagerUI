@@ -5,9 +5,12 @@
     <nz-card nzTitle="Communication">
       <i class="fas fa-envelope text-3xl text-blue-600"></i>
     </nz-card>
-    <nz-card nzTitle="Customer">
+
+    <!-- Use replaceUrl to forget past path when navigating -->
+    <nz-card nzTitle="Customer" [routerLink]="['/dashboard/customers']" [queryParams]="{replace: true}">
       <i class="fas fa-user-friends text-3xl text-green-600"></i>
     </nz-card>
+
     <!-- Add more cards as needed -->
   </div>
 </div>

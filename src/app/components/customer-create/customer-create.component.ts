@@ -23,7 +23,7 @@ export class CustomerCreateComponent implements OnInit {
 
   createCustomer(): void {
     this.customerService.createCustomer(this.customer).subscribe(() => {
-      this.router.navigate(['/dashboard/customers']);
+      this.router.navigate(['/dashboard/customers'], {replaceUrl: true});
     });
   }
 }

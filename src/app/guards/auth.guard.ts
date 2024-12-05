@@ -13,16 +13,16 @@ export class AuthGuard implements CanActivate {
     route: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): Observable<boolean> | Promise<boolean> | boolean {
+    // Ensure we are in the browser environment
     if (typeof window !== 'undefined' && window.localStorage) {
       const token = localStorage.getItem('token');
       if (token) {
-        return true; 
+        return true; // User is authenticated
       } else {
-        this.router.navigate(['/login']);
-        return false; 
+        this.router.navigate(['/login'], { replaceUrl: true });
+        return false; // Not authenticated, redirect to login
       }
-    } else {
-      return false;
     }
+    return false;
   }
 }

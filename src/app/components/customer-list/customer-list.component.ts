@@ -71,7 +71,7 @@ export class CustomerListComponent implements OnInit {
   }
 
   viewCustomer(id: string): void {
-    this.router.navigate([`dashboard/customers/${id}`]);
+    this.router.navigate([`dashboard/customers/${id}`], {replaceUrl: true});
   }
 
   deleteCustomer(id: string): void {

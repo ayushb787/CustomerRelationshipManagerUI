@@ -45,7 +45,7 @@ export class LoginComponent {
             localStorage.setItem('role', response.data.role);
   
             // Navigate to the dashboard
-            this.router.navigate(['/dashboard']);
+            this.router.navigate(['/dashboard'], {replaceUrl: true});
           } else {
             alert('Login failed: ' + response.message);
           }
