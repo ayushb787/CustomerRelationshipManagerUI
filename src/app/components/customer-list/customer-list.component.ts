@@ -2,8 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { CustomerService } from '../../services/customer.service';
 import { Router } from '@angular/router'; 
 import { CommonModule } from '@angular/common';
-import { NzCardComponent } from 'ng-zorro-antd/card';
-import { FormsModule } from '@angular/forms';
 import { NzTableModule, NzTableQueryParams } from 'ng-zorro-antd/table';
 
 @Component({
@@ -18,7 +16,7 @@ export class CustomerListComponent implements OnInit {
   customers: any[] = [];
   filteredCustomers: any[] = [];
   token: string | null = '';
-  pageSize = 10;
+  pageSize = 100;
   pageIndex = 1;
   total = 0;
   loading = true;
@@ -49,7 +47,7 @@ export class CustomerListComponent implements OnInit {
     if (this.token) {
       this.getCustomers();
     } else {
-      console.error('Token is not available');
+      alert('Token is not available');
     }
   }
 
@@ -63,6 +61,7 @@ export class CustomerListComponent implements OnInit {
           this.loading = false;
         },
         (error) => {
+          alert('Error fetching customers');
           console.error('Error fetching customers', error);
           this.loading = false;
         }
@@ -76,15 +75,17 @@ export class CustomerListComponent implements OnInit {
 
   deleteCustomer(id: string): void {
     if (this.token) {
+      if (confirm('Are you sure you want to delete this lead?')){
       this.customerService.deleteCustomer(id).subscribe(
         (response) => {
-          console.log('Customer deleted successfully');
+          alert('Customer deleted successfully');
           this.getCustomers();  
         },
         (error) => {
           console.error('Error deleting customer', error);
         }
       );
+    }
     }
   }
 
