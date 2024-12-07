@@ -13,9 +13,9 @@
     >
       <thead>
         <tr>
-          <th nzColumnKey="customerId" [nzSortFn]="true" [nzSortPriority]="true">Customer ID</th>
+          <th nzColumnKey="customerId" [nzSortFn]="true" [nzSortPriority]="true">Customer</th>
           <th nzColumnKey="assignedTo">Assigned To</th>
-          <th nzColumnKey="status"  [nzFilterFn]="false">Status</th>
+          <th nzColumnKey="status" [nzFilterFn]="false">Status</th>
           <th nzColumnKey="pipelineStage" [nzFilterFn]="false">Pipeline Stage</th>
           <th nzColumnKey="dateCreated" [nzFilterFn]="false">Date Created</th>
           <th nzColumnKey="lastUpdated" [nzFilterFn]="false">Last Updated</th>
@@ -24,12 +24,12 @@
       </thead>
       <tbody>
         <tr *ngFor="let lead of leads">
-          <td>{{ lead.customerId }}</td>
-          <td>{{ lead.assignedTo }}</td>
+          <td>{{ getCustomerName(lead.customerId) }}</td>
+          <td>{{ getAssignedUsername(lead.assignedTo) }}</td>
           <td>{{ lead.status }}</td>
           <td>{{ lead.pipelineStage }}</td>
-          <td>{{ lead.dateCreated }}</td>
-          <td>{{ lead.lastUpdated }}</td>
+          <td>{{ formatDate(lead.dateCreated) }}</td>
+          <td>{{ formatDate(lead.lastUpdated) }}</td>
           <td class="px-4 py-2 text-center space-x-5">
             <button 
               class="text-blue-500 hover:text-blue-700"

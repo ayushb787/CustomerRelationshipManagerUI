@@ -51,6 +51,7 @@ export class LeadEditComponent implements OnInit {
           }
         },
         (error) => {
+          this.isLoading = false;
           alert("Error fetching lead data");
           console.error('Error fetching lead data:', error);
         }
@@ -63,6 +64,7 @@ export class LeadEditComponent implements OnInit {
         this.customers = data.data; // Assuming customers data structure has `data`
       },
       (error) => {
+        this.isLoading = false;
         alert("Error fetching customers");
         console.error('Error fetching customers:', error);
       }
@@ -81,6 +83,7 @@ export class LeadEditComponent implements OnInit {
         }
       },
       (error) => {
+        this.isLoading = false;
         alert("Error fetching users");
         console.error('Error fetching users:', error);
       }
@@ -94,7 +97,7 @@ export class LeadEditComponent implements OnInit {
       this.leadService.updateLead(this.lead.leadId, this.lead).subscribe(
         () => {
           this.isLoading = false;
-          this.router.navigate(['/dashboard/leads']);
+          this.router.navigate(['/dashboard/leads'], {replaceUrl: true});
         },
         (error) => {
           alert("Error updating lead");
