@@ -1,0 +1,81 @@
+<nz-spin nzTip="Loading..." [nzSpinning]="isLoading">
+    <div class="container mx-auto p-4">
+      <h2 class="text-2xl font-semibold mb-4 text-gray-800">Create Task</h2>
+      <div class="bg-white p-6 rounded-lg shadow-lg">
+        <form (ngSubmit)="createTask()">
+          <div class="form-group mb-4">
+            <label for="assignedTo" class="block text-gray-700">Assigned To</label>
+            <select 
+                [(ngModel)]="task.assignedTo" 
+                name="assignedTo" 
+                class="form-control mt-2 p-2 w-full border rounded-lg" 
+                required>
+                <option value="" disabled selected>Select a user</option>
+                <option *ngFor="let user of users" [value]="user.userId">
+                    {{ user.username }}
+                </option>
+                </select>
+          </div>
+  
+          <div class="form-group mb-4">
+            <label for="description" class="block text-gray-700">Description</label>
+            <input 
+              [(ngModel)]="task.description" 
+              name="description" 
+              type="text" 
+              placeholder="Task Description" 
+              class="form-control mt-2 p-2 w-full border rounded-lg"
+              required />
+          </div>
+  
+          <div class="form-group mb-4">
+            <label for="dueDate" class="block text-gray-700">Due Date</label>
+            <input 
+              [(ngModel)]="task.dueDate" 
+              name="dueDate" 
+              type="date" 
+              class="form-control mt-2 p-2 w-full border rounded-lg"
+              required />
+          </div>
+  
+          <div class="form-group mb-4">
+            <label for="status" class="block text-gray-700">Status</label>
+            <select 
+              [(ngModel)]="task.status" 
+              name="status" 
+              class="form-control mt-2 p-2 w-full border rounded-lg"
+              required>
+              <option value="" disabled selected>Select Status</option>
+              <option value="Pending">Pending</option>
+              <option value="In Progress">In Progress</option>
+              <option value="Completed">Completed</option>
+            </select>
+          </div>
+  
+          <div class="form-group mb-4">
+            <label for="priority" class="block text-gray-700">Priority</label>
+            <select 
+              [(ngModel)]="task.priority" 
+              name="priority" 
+              class="form-control mt-2 p-2 w-full border rounded-lg"
+              required>
+              <option value="" disabled selected>Select Priority</option>
+              <option value="Low">Low</option>
+              <option value="Medium">Medium</option>
+              <option value="High">High</option>
+            </select>
+          </div>
+  
+          <div class="form-group mb-4">
+            <button 
+              type="submit" 
+              [disabled]="!task.assignedTo || !task.description || !task.dueDate || !task.status || !task.priority"
+              class="btn btn-primary bg-blue-500 text-white py-2 px-4 rounded-lg hover:bg-blue-700">
+              Create Task
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </nz-spin>
+  

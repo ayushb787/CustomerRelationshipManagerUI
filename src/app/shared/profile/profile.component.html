@@ -1,0 +1,22 @@
+<div class="profile-container">
+    <div class="profile-header text-center my-6">
+      <h2 class="text-2xl font-semibold text-gray-800">Profile</h2>
+      <p class="text-md text-gray-500">Welcome, {{ username }}! You are logged in as a(n) {{ role }}.</p>
+    </div>
+  
+    <div class="profile-content flex flex-col items-center space-y-4">
+      <!-- Profile Info Section -->
+      <div class="profile-info text-center">
+        <p class="text-lg font-semibold">Username: <span class="font-normal">{{ username }}</span></p>
+        <p class="text-lg font-semibold">Role: <span class="font-normal">{{ role }}</span></p>
+      </div>
+  
+      <!-- Logout Button -->
+      <div class="logout-btn">
+        <button (click)="onLogout()" class="btn bg-red-500 text-white hover:bg-red-600 rounded-lg px-6 py-2">
+          Logout
+        </button>
+      </div>
+    </div>
+  </div>
+  

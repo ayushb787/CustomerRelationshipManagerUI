@@ -40,8 +40,8 @@ export class LoginComponent {
       this.http.post(`${environment.baseUrl}/api/auth/login`, this.loginForm.value).subscribe({
         next: (response: any) => {
           if (response.success) {
-            // Store the token, username, and role in local storage
             localStorage.setItem('token', response.data.token);
+            localStorage.setItem('userId', response.data.userId);
             localStorage.setItem('username', response.data.username);
             localStorage.setItem('role', response.data.role);
   

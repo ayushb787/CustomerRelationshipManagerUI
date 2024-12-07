@@ -1,0 +1,27 @@
+.profile-container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 2rem;
+    background-color: #f9fafb;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  .profile-header h2 {
+    font-size: 2rem;
+    color: #4a4a4a;
+  }
+  
+  .profile-header p {
+    color: #6b7280;
+  }
+  
+  .profile-info p {
+    font-size: 1.25rem;
+    margin-bottom: 1rem;
+  }
+  
+  .logout-btn button {
+    width: 100%;
+  }
+  

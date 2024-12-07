@@ -1,8 +1,58 @@
-<ul nz-menu nzMode="horizontal" class="shadow-md bg-white">
-  <li nz-menu-item nzSelected>
-    <a routerLink="/dashboard">Dashboard</a>
-  </li>
-  <li nz-menu-item (click)="onLogout()">
-    <a>Logout</a>
-  </li>
-</ul>
+<div class="shadow-md bg-white px-6 py-3 flex items-center justify-between">
+  <!-- Left Section: Brand/Navigation -->
+  <div class="flex items-center space-x-6">
+    <a class="text-2xl font-bold text-indigo-600 hover:text-indigo-800 transition" routerLink="/dashboard">
+      CRM Dashboard
+    </a>
+
+    <ul nz-menu nzMode="horizontal" class="hidden md:flex space-x-4">
+      <!-- Highlight Dashboard as selected -->
+      <li nz-menu-item [nzSelected]="isDashboardSelected" routerLink="/dashboard">
+        <a class="hover:text-indigo-600">Dashboard</a>
+      </li>
+      <li nz-menu-item [nzSelected]="isLeadsSelected" routerLink="/dashboard/leads">
+        <a class="hover:text-indigo-600">Leads</a>
+      </li>
+      <li nz-menu-item [nzSelected]="isCustomersSelected" routerLink="/dashboard/customers">
+        <a class="hover:text-indigo-600">Customers</a>
+      </li>
+      <li nz-menu-item [nzSelected]="isAdmin && isTasksSelected" routerLink="/dashboard/all-tasks" *ngIf="isAdmin">
+        <a class="hover:text-indigo-600">Tasks</a>
+      </li>
+      <li nz-menu-item [nzSelected]="!isAdmin && isTasksSelected" routerLink="/dashboard/tasks" *ngIf="!isAdmin">
+        <a class="hover:text-indigo-600">Tasks</a>
+      </li>
+    </ul>
+  </div>
+
+  <!-- Right Section: Profile and Logout -->
+  <div class="flex items-center space-x-6">
+    <!-- Role and Username -->
+    <div class="text-right">
+      <p class="text-sm font-semibold text-gray-700">Hello, <span class="text-indigo-600">{{ username }}</span></p>
+      <p class="text-xs text-gray-500">{{ role }}</p>
+    </div>
+
+    <!-- Profile Icon with Dropdown Menu -->
+    <div class="relative group">
+      <button class="bg-gray-100 hover:bg-gray-200 rounded-full w-10 h-10 flex items-center justify-center">
+        <img 
+          src="https://via.placeholder.com/40" 
+          alt="Profile" 
+          class="rounded-full object-cover w-full h-full"
+        />
+      </button>
+      <!-- Dropdown Menu -->
+      <div class="absolute right-0 mt-2 bg-white shadow-md rounded-lg text-gray-700 w-48 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+        <ul class="py-2">
+          <li>
+            <a routerLink="/profile" class="block px-4 py-2 hover:bg-gray-100">View Profile</a>
+          </li>
+          <li>
+            <a (click)="onLogout()" class="block px-4 py-2 hover:bg-gray-100">Logout</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
