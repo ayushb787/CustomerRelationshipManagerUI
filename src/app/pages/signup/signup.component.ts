@@ -8,6 +8,7 @@ import { NzInputModule } from 'ng-zorro-antd/input';
 import { NzSelectModule } from 'ng-zorro-antd/select';
 import { CommonModule } from '@angular/common';
 import { NzCardModule } from 'ng-zorro-antd/card';
+import { environment } from '../../services/environment';
 
 @Component({
   selector: 'app-signup',
@@ -40,7 +41,7 @@ export class SignupComponent {
 
   onSubmit(): void {
     if (this.signupForm.valid) {
-      const apiUrl = 'http://localhost:8080/api/auth/signup';
+      const apiUrl = `${environment.baseUrl}/api/auth/signup`;
       this.http.post(apiUrl, this.signupForm.value).subscribe({
         next: () => this.router.navigate(['/login'], {replaceUrl: true}),
         error: (err) => alert('Signup failed: ' + err.message)

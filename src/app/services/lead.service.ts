@@ -3,12 +3,13 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { Lead } from '../models/lead.model';
+import { environment } from './environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class LeadService {
-  private apiUrl = `http://localhost:8080/api/leads`;
+  private apiUrl = `${environment.baseUrl}/api/leads`;
 
   constructor(private http: HttpClient) {}
 
@@ -89,7 +90,7 @@ export class LeadService {
       throw new Error('Authentication token is missing');
     }
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-    return this.http.get<any>('http://localhost:8080/api/leads/users?role=Salesperson', { headers }).pipe(
+    return this.http.get<any>(`${environment.baseUrl}/api/leads/users?role=Salesperson`, { headers }).pipe(
       catchError((error) => {
         console.error(error);
         throw error;

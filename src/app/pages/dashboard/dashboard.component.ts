@@ -14,6 +14,12 @@ import { Router, RouterModule } from '@angular/router';
 export class DashboardComponent {
   constructor(private router: Router) {}
  
+  isAdmin = false;
+
+  ngOnInit(): void {
+    const role = localStorage.getItem('role');
+    this.isAdmin = role === 'Admin';
+  }
   navigateToCustomers() {
     this.router.navigate(['/dashboard/customers'], { replaceUrl: true });
   }

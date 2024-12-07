@@ -19,7 +19,7 @@
           <th nzColumnKey="email">Email</th>
           <th nzColumnKey="phone">Phone</th>
           <th nzColumnKey="address">Address</th>
-          <th nzColumnKey="action">Actions</th>
+          <th nzColumnKey="action" class="w-48">Actions</th> 
         </tr>
       </thead>
       <tbody>
@@ -30,17 +30,24 @@
           <td>{{ customer.email }}</td>
           <td>{{ customer.phone }}</td>
           <td>{{ customer.address }}</td>
-          <td class="px-4 py-2 text-center space-x-5">
-            <button 
-              class="text-blue-500 hover:text-blue-700"
-              (click)="viewCustomer(customer.customerId)">
-              <i class="fas fa-edit"></i>
-            </button>
-            <button 
-              class="text-red-500 hover:text-red-700"
-              (click)="deleteCustomer(customer.customerId)">
-              <i class="fas fa-trash-alt"></i>
-            </button>
+          <td class="px-4 py-2 text-center">
+            <div class="flex justify-start items-center space-x-4">
+              <button 
+                class="text-blue-500 hover:text-blue-700"
+                (click)="viewCustomer(customer.customerId)">
+                <i class="fas fa-edit"></i>
+              </button>
+              <button 
+                class="text-red-500 hover:text-red-700"
+                (click)="deleteCustomer(customer.customerId)">
+                <i class="fas fa-trash-alt"></i>
+              </button>
+              <button 
+                class="text-green-500 hover:text-green-700"
+                (click)="sendEmail(customer.customerId)">
+                <i class="fas fa-envelope"></i>
+              </button>
+            </div>
           </td>
         </tr>
       </tbody>

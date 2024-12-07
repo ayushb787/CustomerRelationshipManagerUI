@@ -21,7 +21,6 @@ export class CustomerListComponent implements OnInit {
   total = 0;
   loading = true;
 
-  // Categories and Preferences for filter checkboxes
   categories = [
     { name: 'Inactive', selected: false },
     { name: 'Potential', selected: false },
@@ -105,7 +104,6 @@ export class CustomerListComponent implements OnInit {
     this.pageIndex = pageIndex;
   }
 
-  // Implement sort logic here for Name column
   sortName = (a: any, b: any): number => {
     const nameA = a.name.toLowerCase();
     const nameB = b.name.toLowerCase();
@@ -118,4 +116,9 @@ export class CustomerListComponent implements OnInit {
     }
     return 0;
   };
+
+
+  sendEmail(customerId: string): void {
+    this.router.navigate([`dashboard/customers/email/${customerId}`], {replaceUrl:true});
+  }
 }

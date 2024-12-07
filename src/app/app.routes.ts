@@ -10,17 +10,20 @@ import { LeadCreateComponent } from './leads/lead-create/lead-create.component';
 import { LeadEditComponent } from './leads/lead-edit/lead-edit.component';
 import { AuthGuard } from './guards/auth.guard';
 import { RedirectGuard } from './guards/redirect.guard';
+import { EmailFormComponent } from './components/email-form/email-form.component';
+import { AdminGuard } from './guards/admin.guard';
 
 
 export const routes: Routes = [
-  { path: 'login', component: LoginComponent, canActivate: [RedirectGuard] },  // Use RedirectGuard for login
+  { path: 'login', component: LoginComponent, canActivate: [RedirectGuard] },  
   { path: 'signup', component: SignupComponent },
   { path: 'dashboard', component: DashboardComponent , canActivate: [AuthGuard] },
   { path: 'dashboard/customers', component: CustomerListComponent, canActivate: [AuthGuard] },
   { path: 'dashboard/customers/create', component: CustomerCreateComponent, canActivate: [AuthGuard] },
   { path: 'dashboard/customers/:id', component: CustomerDetailComponent, canActivate: [AuthGuard] },
+  { path: 'dashboard/customers/email/:id', component: EmailFormComponent, canActivate: [AuthGuard] },
   { path: 'dashboard/leads', component: LeadListComponent, canActivate: [AuthGuard] },
-  { path: 'dashboard/leads/create', component: LeadCreateComponent, canActivate: [AuthGuard] },
+  { path: 'dashboard/leads/create', component: LeadCreateComponent, canActivate: [AuthGuard, AdminGuard] },
   { path: 'dashboard/leads/:id', component: LeadEditComponent, canActivate: [AuthGuard] },
-  { path: '', redirectTo: '/login', pathMatch: 'full' }  // Default route that will be managed by RedirectGuard
+  { path: '', redirectTo: '/login', pathMatch: 'full' }  
 ];

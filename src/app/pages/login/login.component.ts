@@ -7,6 +7,7 @@ import { NzButtonModule } from 'ng-zorro-antd/button';
 import { NzInputModule } from 'ng-zorro-antd/input';
 import { CommonModule } from '@angular/common';
 import { NzCardComponent } from 'ng-zorro-antd/card';
+import { environment } from '../../services/environment';
 
 @Component({
   selector: 'app-login',
@@ -36,7 +37,7 @@ export class LoginComponent {
   onSubmit(): void {
     if (this.loginForm.valid) {
       console.log(this.loginForm.value);
-      this.http.post('http://localhost:8080/api/auth/login', this.loginForm.value).subscribe({
+      this.http.post(`${environment.baseUrl}/api/auth/login`, this.loginForm.value).subscribe({
         next: (response: any) => {
           if (response.success) {
             // Store the token, username, and role in local storage
@@ -51,6 +52,7 @@ export class LoginComponent {
           }
         },
         error: (err) => {
+          console.log(err);
           alert('Login failed: ' + err.message);
         }
       });
