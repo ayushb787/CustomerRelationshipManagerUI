@@ -52,7 +52,7 @@ export class TaskCreateComponent implements OnInit {
     this.isLoading = true;
     this.taskService.createTask(this.task).subscribe(() => {
       this.isLoading = false;
-      this.router.navigate(['/dashboard'], { replaceUrl: true });
+      this.router.navigate(['/dashboard/all-tasks'], { replaceUrl: true });
     });
   }
 }

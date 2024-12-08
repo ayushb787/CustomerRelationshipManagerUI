@@ -19,7 +19,7 @@
           <th nzColumnKey="email">Email</th>
           <th nzColumnKey="phone">Phone</th>
           <th nzColumnKey="address">Address</th>
-          <th nzColumnKey="action" class="w-48">Actions</th> 
+          <th nzColumnKey="action" class="w-48">Actions</th>
         </tr>
       </thead>
       <tbody>
@@ -43,10 +43,15 @@
                 <i class="fas fa-trash-alt"></i>
               </button>
               <button 
-                class="text-green-500 hover:text-green-700"
+                class="text-yellow-500 hover:text-yellow-700"
                 (click)="sendEmail(customer.customerId)">
                 <i class="fas fa-envelope"></i>
               </button>
+              <a 
+                class="text-green-500 hover:text-green-700"
+                [href]="'tel:' + customer.phone">
+                <i class="fas fa-phone-alt"></i>
+              </a>
             </div>
           </td>
         </tr>

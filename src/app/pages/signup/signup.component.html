@@ -1,45 +1,80 @@
-<div class="min-h-screen flex items-center justify-center bg-gray-100">
+<nz-spin nzTip="Loading..." [nzSpinning]="isLoading"> 
+  <div class="min-h-screen flex items-center justify-center bg-gray-100">
     <nz-card class="w-96 shadow-lg">
       <div class="text-center mb-5">
         <i class="fas fa-user-plus text-5xl text-green-500"></i>
         <h2 class="text-xl font-bold mt-2">Sign Up</h2>
       </div>
-      <form nz-form [formGroup]="signupForm" (ngSubmit)="onSubmit()">
-        <nz-form-item>
-          <nz-form-label nzFor="username">Username</nz-form-label>
-          <nz-form-control>
-            <input nz-input formControlName="username" id="username" placeholder="Enter your username" />
-          </nz-form-control>
-        </nz-form-item>
-        <nz-form-item>
-          <nz-form-label nzFor="email">Email</nz-form-label>
-          <nz-form-control>
-            <input nz-input formControlName="email" id="email" placeholder="Enter your email" />
-          </nz-form-control>
-        </nz-form-item>
-        <nz-form-item>
-          <nz-form-label nzFor="phone">Phone</nz-form-label>
-          <nz-form-control>
-            <input nz-input formControlName="phone" id="phone" placeholder="Enter your phone number" />
-          </nz-form-control>
-        </nz-form-item>
-        <nz-form-item>
-          <nz-form-label nzFor="password">Password</nz-form-label>
-          <nz-form-control>
-            <input nz-input type="password" formControlName="password" id="password" placeholder="Enter your password" />
-          </nz-form-control>
-        </nz-form-item>
-        <nz-form-item>
-          <nz-form-label nzFor="role">Role</nz-form-label>
-          <nz-form-control>
-            <nz-select formControlName="role" id="role" placeholder="Select Role">
-              <nz-option nzValue="Salesperson" nzLabel="Salesperson"></nz-option>
-              <nz-option nzValue="Admin" nzLabel="Admin"></nz-option>
-            </nz-select>
-          </nz-form-control>
-        </nz-form-item>
-        <button nz-button nzType="primary" class="w-full mt-4" [disabled]="signupForm.invalid">Sign Up</button>
+      <form [formGroup]="signupForm" (ngSubmit)="onSubmit()">
+        <div class="form-group mb-4">
+          <label for="username" class="block text-gray-700">Username</label>
+          <input
+            formControlName="username"
+            id="username"
+            class="form-control mt-2 p-2 w-full border rounded-lg"
+            placeholder="Enter your username"
+            required
+          />
+        </div>
+        <div class="form-group mb-4">
+          <label for="email" class="block text-gray-700">Email</label>
+          <input
+            formControlName="email"
+            id="email"
+            class="form-control mt-2 p-2 w-full border rounded-lg"
+            placeholder="Enter your email"
+            type="email"
+            required
+          />
+        </div>
+        <div class="form-group mb-4">
+          <label for="phoneNumber" class="block text-gray-700">Phone</label>
+          <input
+            formControlName="phoneNumber"
+            id="phoneNumber"
+            class="form-control mt-2 p-2 w-full border rounded-lg"
+            placeholder="Enter your phone number"
+            type="text"
+            required
+          />
+        </div>
+        <div class="form-group mb-4">
+          <label for="password" class="block text-gray-700">Password</label>
+          <input
+            formControlName="password"
+            id="password"
+            class="form-control mt-2 p-2 w-full border rounded-lg"
+            placeholder="Enter your password"
+            type="password"
+            required
+          />
+        </div>
+        <div class="form-group mb-4">
+          <label for="role" class="block text-gray-700">Role</label>
+          <select
+            formControlName="role"
+            id="role"
+            class="form-control mt-2 p-2 w-full border rounded-lg"
+            required
+          >
+            <option value="" disabled>Select Role</option>
+            <option value="Salesperson">Salesperson</option>
+            <option value="Admin">Admin</option>
+          </select>
+        </div>
+        <button type="submit" class="bg-blue-500 text-white py-2 px-4 w-full rounded-lg" [disabled]="signupForm.invalid">
+          Sign Up
+        </button>
       </form>
+      <div class="text-center mt-4">
+        <button
+          nz-button
+          nzType="link"
+          (click)="navigateToLogin()"
+          class="text-blue-500 hover:text-blue-700">
+          Already have an account? Login
+        </button>
+      </div>
     </nz-card>
   </div>
-  
+</nz-spin>

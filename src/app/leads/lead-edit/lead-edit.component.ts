@@ -47,6 +47,7 @@ export class LeadEditComponent implements OnInit {
 
            
           } else {
+            this.isLoading = false;
             alert('Error fetching lead data');
           }
         },
@@ -100,6 +101,7 @@ export class LeadEditComponent implements OnInit {
           this.router.navigate(['/dashboard/leads'], {replaceUrl: true});
         },
         (error) => {
+          this.isLoading = false;
           alert("Error updating lead");
           console.error('Error updating lead:', error);
         }

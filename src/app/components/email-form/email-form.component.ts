@@ -48,7 +48,7 @@ export class EmailFormComponent implements OnInit {
     this.customerService.sendEmail(this.customerId, payload).subscribe(
       (response) => {
         alert('Email sent successfully!');
-        this.router.navigate(['/dashboard/customers']);
+        this.router.navigate(['/dashboard/customers'], {replaceUrl: true});
         this.isLoading = false;
       },
       (error) => {

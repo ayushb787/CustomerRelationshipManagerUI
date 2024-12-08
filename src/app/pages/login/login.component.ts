@@ -8,6 +8,7 @@ import { NzInputModule } from 'ng-zorro-antd/input';
 import { CommonModule } from '@angular/common';
 import { NzCardComponent } from 'ng-zorro-antd/card';
 import { environment } from '../../services/environment';
+import { NzSpinComponent } from 'ng-zorro-antd/spin';
 
 @Component({
   selector: 'app-login',
@@ -19,14 +20,15 @@ import { environment } from '../../services/environment';
     NzButtonModule,
     NzInputModule,
     HttpClientModule,
-    NzCardComponent
+    NzCardComponent,
+    NzSpinComponent
   ],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent {
   loginForm: FormGroup;
-
+  isLoading = false;
   constructor(private fb: FormBuilder, private http: HttpClient, private router: Router) {
     this.loginForm = this.fb.group({
       username: ['', [Validators.required]],
@@ -35,6 +37,7 @@ export class LoginComponent {
   }
 
   onSubmit(): void {
+    this.isLoading = true;
     if (this.loginForm.valid) {
       console.log(this.loginForm.value);
       this.http.post(`${environment.baseUrl}/api/auth/login`, this.loginForm.value).subscribe({
@@ -45,18 +48,23 @@ export class LoginComponent {
             localStorage.setItem('username', response.data.username);
             localStorage.setItem('role', response.data.role);
   
-            // Navigate to the dashboard
+            this.isLoading = false;
             this.router.navigate(['/dashboard'], {replaceUrl: true});
           } else {
+            this.isLoading = false;
             alert('Login failed: ' + response.message);
           }
         },
         error: (err) => {
+          this.isLoading = false;
           console.log(err);
-          alert('Login failed: ' + err.message);
+          alert('Login failed: ' + err.error.message);
         }
       });
     }
+  }
+  navigateToSignup(): void {
+    this.router.navigate(['/signup'], {replaceUrl: true});
   }
   
 }
