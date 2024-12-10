@@ -7,6 +7,7 @@ import { Customer } from '../../models/customer.model';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common'; 
 import { NzSpinModule } from 'ng-zorro-antd/spin';
+import { AlertNotificationService } from '../../services/alert-notification.service';
 
 @Component({
   selector: 'app-lead-create',
@@ -32,7 +33,8 @@ export class LeadCreateComponent implements OnInit {
   constructor(
     private leadService: LeadService,
     private customerService: CustomerService,  
-    private router: Router
+    private router: Router,
+    private alert: AlertNotificationService,
   ) {}
 
   ngOnInit(): void { 
@@ -41,18 +43,16 @@ export class LeadCreateComponent implements OnInit {
       (data) => {
         this.customers = data.data;  
       },
-      (error) => {
-        alert("Error fetching customers");
-        console.error('Error fetching customers:', error);
+      (error) => { 
+        this.alert.alertNotification('Error fetching customers', 'error'); 
       }
     );
     this.leadService.getUsers().subscribe((response) => { 
         this.users = response.data; 
     },
     (error) => {
-      this.isLoading = false;
-      alert("Error fetching users");
-      console.error('Error fetching users:', error);
+      this.isLoading = false; 
+      this.alert.alertNotification('Error fetching users', 'error'); 
     }
   );
   this.isLoading = false;

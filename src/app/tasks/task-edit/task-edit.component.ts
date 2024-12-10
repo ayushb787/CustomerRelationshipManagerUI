@@ -6,6 +6,7 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { NzSpinComponent } from 'ng-zorro-antd/spin';
 import { Task } from '../../models/task.model';
+import { AlertNotificationService } from '../../services/alert-notification.service';
 
 @Component({
   selector: 'app-task-edit',
@@ -30,14 +31,15 @@ export class TaskEditComponent implements OnInit {
     private route: ActivatedRoute,
     private taskService: TaskService,
     private router: Router,
+    private alert: AlertNotificationService,
   ) {}
 
   ngOnInit(): void {
     this.taskId = this.route.snapshot.paramMap.get('id');
     if (this.taskId) {
       this.loadTask();
-    } else {
-      console.error('Task ID is missing');
+    } else { 
+      this.alert.alertNotification('Task ID is missing', 'error'); 
     }
   }
 
@@ -51,8 +53,8 @@ export class TaskEditComponent implements OnInit {
         this.task = task.data;
       },
       (error) => {
-        this.isLoading = false;
-        console.error('Error loading task:', error);
+        this.isLoading = false; 
+        this.alert.alertNotification('Error loading task', 'error'); 
       }
     );
   }
@@ -64,8 +66,8 @@ export class TaskEditComponent implements OnInit {
 
     this.taskService.updateTask(this.taskId, this.task).subscribe(
       (response) => {
-        this.isLoading = false;
-        alert('Task updated successfully'); 
+        this.isLoading = false; 
+        this.alert.alertNotification('Task updated successfully', 'error');
         if(this.taskService.getRole() == "Admin"){
           this.router.navigate(['/dashboard/all-tasks/'], { replaceUrl: true });
         }else{
@@ -73,8 +75,8 @@ export class TaskEditComponent implements OnInit {
         }
       },
       (error) => {
-        this.isLoading = false;
-        console.error('Error updating task status:', error);
+        this.isLoading = false; 
+        this.alert.alertNotification('Error updating task status', 'error'); 
       }
     );
   }

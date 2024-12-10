@@ -1,11 +1,13 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, Router } from '@angular/router';
+import { AlertNotificationService } from '../services/alert-notification.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AdminGuard implements CanActivate {
-  constructor(private router: Router) {}
+  constructor(private router: Router,
+    private alert: AlertNotificationService,) {}
 
   canActivate(): boolean {
     const role = localStorage.getItem('role');

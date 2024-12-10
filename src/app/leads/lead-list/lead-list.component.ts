@@ -6,6 +6,7 @@ import { CommonModule } from '@angular/common';
 import { NzTableModule, NzTableQueryParams } from 'ng-zorro-antd/table';
 import { DatePipe } from '@angular/common'; // Import DatePipe
 import { CustomerService } from '../../services/customer.service'; 
+import { AlertNotificationService } from '../../services/alert-notification.service';
 
 @Component({
   selector: 'app-lead-list',
@@ -28,7 +29,8 @@ export class LeadListComponent implements OnInit {
     private leadService: LeadService,
     private router: Router,
     private customerService: CustomerService, 
-    private datePipe: DatePipe   
+    private datePipe: DatePipe   ,
+    private alert: AlertNotificationService,
   ) { }
 
   ngOnInit(): void {
@@ -37,8 +39,8 @@ export class LeadListComponent implements OnInit {
       this.getPaginatedLeads();
       this.loadCustomers();
       this.loadUsers();
-    } else {
-      alert('Token is not available');
+    } else { 
+      this.alert.alertNotification('Token is not available', 'error');
     }
   }
 
@@ -51,9 +53,8 @@ export class LeadListComponent implements OnInit {
           this.leads = data.data; 
           this.loading = false;
         },
-        (error) => {
-          alert('Error fetching leads');
-          console.log('Error fetching leads:', error);
+        (error) => { 
+          this.alert.alertNotification('Error fetching leads', 'error'); 
           this.loading = false;
         }
       );
@@ -64,16 +65,13 @@ export class LeadListComponent implements OnInit {
     this.loading = true;
     if (this.token) {
       this.leadService.getPaginatedLeads(this.pageIndex, this.pageSize).subscribe(
-        (response: any) => { 
-          console.log(response);
+        (response: any) => {  
           this.leads = response.data.content || [];   
-          this.total = response.data.page.totalPages || 0; 
-          console.log(this.customers);
+          this.total = response.data.page.totalPages || 0;  
           this.loading = false;
         },
-        (error) => {
-          alert('Error fetching paginated leads');
-          console.error('Error fetching paginated leads', error);
+        (error) => { 
+          this.alert.alertNotification('Error fetching paginated leads', 'error'); 
           this.loading = false;
         }
       );
@@ -85,8 +83,8 @@ export class LeadListComponent implements OnInit {
       (response: any) => {
         this.customers = response.data.content;
       },
-      (error) => {
-        console.error('Error fetching customers:', error);
+      (error) => { 
+        this.alert.alertNotification('Error fetching customers', 'error');
       }
     );
   }
@@ -97,7 +95,7 @@ export class LeadListComponent implements OnInit {
         this.users = data.data;
       },
       (error) => {
-        console.error('Error fetching users:', error);
+        this.alert.alertNotification('Error fetching users', 'error'); 
       }
     );
   }
@@ -130,8 +128,8 @@ export class LeadListComponent implements OnInit {
   deleteLead(leadId: number): void {
     if (this.token) {
       if (confirm('Are you sure you want to delete this lead?')) {
-        this.leadService.deleteLead(leadId).subscribe((response) => {
-          alert('Customer deleted successfully');
+        this.leadService.deleteLead(leadId).subscribe((response) => { 
+          this.alert.alertNotification('Customer deleted successfully', 'success');
           this.loadLeads();
         });
       }

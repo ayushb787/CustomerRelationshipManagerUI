@@ -10,6 +10,7 @@ import { CommonModule } from '@angular/common';
 import { NzCardModule } from 'ng-zorro-antd/card';
 import { environment } from '../../services/environment';
 import { NzSpinComponent } from 'ng-zorro-antd/spin';
+import { AlertNotificationService } from '../../services/alert-notification.service';
 
 @Component({
   selector: 'app-signup',
@@ -32,7 +33,8 @@ export class SignupComponent {
   signupForm: FormGroup;
   isLoading = false;
 
-  constructor(private fb: FormBuilder, private http: HttpClient, private router: Router) {
+  constructor(private fb: FormBuilder, private http: HttpClient, private router: Router,
+    private alert: AlertNotificationService,) {
     this.signupForm = this.fb.group({
       username: ['', [Validators.required]],
       password: ['', [Validators.required]],
@@ -52,9 +54,8 @@ export class SignupComponent {
           this.router.navigate(['/login'], {replaceUrl: true})
         },
         error: (err) => { 
-          this.isLoading = false;
-          console.log(err); 
-          alert('Signup failed: ' + err.error.message);
+          this.isLoading = false; 
+          this.alert.alertNotification('Signup failed' + err.error.message, 'error');
         }
       });
     }

@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { environment } from './environment';
+import { AlertNotificationService } from './alert-notification.service';
 
 @Injectable({
   providedIn: 'root'
@@ -10,9 +11,8 @@ import { environment } from './environment';
 export class CustomerService {
 
   private apiUrl = `${environment.baseUrl}/api/customers`;
-  private communicationApiUrl = `${environment.baseUrl}/api/communication/notify-customer`;
-
-  constructor(private http: HttpClient) {}
+  private communicationApiUrl = `${environment.baseUrl}/api/communication/notify-customer`; 
+  constructor(private http: HttpClient, private alert: AlertNotificationService) {}
 
   private getToken(): string | null {
     return localStorage.getItem('token');
@@ -29,15 +29,15 @@ export class CustomerService {
         .map(([field, message]) => `${message}`)
         .join('\n');
     }
-
-    alert(alertMessage); //New Custom Popups
+ 
+    this.alert.alertNotification(alertMessage, 'error');
     return throwError(() => new Error(errorMessage));
   }
 
   private getAuthHeaders(): HttpHeaders {
     const token = this.getToken();
-    if (!token) {
-      alert('Authentication required. Redirecting to login.'); 
+    if (!token) { 
+      this.alert.alertNotification('Authentication required. Redirecting to login.', 'error');
       throw new Error('Authentication token is missing');
     }
     return new HttpHeaders().set('Authorization', `Bearer ${token}`);

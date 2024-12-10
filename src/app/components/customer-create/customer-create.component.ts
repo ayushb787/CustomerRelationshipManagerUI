@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms'; 
 import { NzSpinModule } from 'ng-zorro-antd/spin';
-
+import { AlertNotificationService } from '../../services/alert-notification.service';
 @Component({
   selector: 'app-customer-create',
   standalone: true,
@@ -18,7 +18,8 @@ export class CustomerCreateComponent implements OnInit {
 
   constructor(
     private customerService: CustomerService,
-    private router: Router
+    private router: Router,
+    private alert: AlertNotificationService,
   ) {}
 
   ngOnInit(): void {}

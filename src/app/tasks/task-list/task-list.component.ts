@@ -8,6 +8,7 @@ import { Task } from '../../models/task.model';
 import { Router } from '@angular/router';
 import { LeadService } from '../../services/lead.service';
 import { DatePipe } from '@angular/common';
+import { AlertNotificationService } from '../../services/alert-notification.service';
 
 @Component({
   selector: 'app-task-list',
@@ -30,15 +31,16 @@ export class TaskListComponent implements OnInit {
   constructor(
     private taskService: TaskService, private router: Router,
     private leadService: LeadService,
-    private datePipe: DatePipe) { }
+    private datePipe: DatePipe,
+    private alert: AlertNotificationService,) { }
 
   ngOnInit(): void {
     this.token = localStorage.getItem('token');
     if (this.token) {
       this.getPaginatedTasks();
       this.loadUsers();
-    } else {
-      alert('Token is not available');
+    } else { 
+      this.alert.alertNotification('Token is not available', 'error');
     }
   }
 
@@ -49,13 +51,11 @@ export class TaskListComponent implements OnInit {
       this.taskService.getPaginatedTasksBySalesperson(this.pageIndex, this.pageSize).subscribe(
         (response: any) => {
           this.tasks = response.data.content || [];
-          this.total = response.data.page.totalPages || 0;
-          console.log(this.tasks);
+          this.total = response.data.page.totalPages || 0; 
           this.loading = false;
         },
-        (error) => {
-          alert('Error fetching paginated tasks');
-          console.error('Error fetching paginated tasks', error);
+        (error) => { 
+          this.alert.alertNotification('Error fetching paginated tasks', 'error'); 
           this.loading = false;
         }
       );
@@ -68,8 +68,8 @@ export class TaskListComponent implements OnInit {
       (data: any) => {
         this.users = data.data;
       },
-      (error) => {
-        console.error('Error fetching users:', error);
+      (error) => { 
+        this.alert.alertNotification('Error fetching users', 'error'); 
       }
     );
   }
@@ -93,8 +93,8 @@ export class TaskListComponent implements OnInit {
         () => {
           this.getPaginatedTasks();
         },
-        (error) => {
-          console.error('Error deleting task:', error);
+        (error) => { 
+          this.alert.alertNotification('Error deleting task', 'error'); 
         }
       );
     }

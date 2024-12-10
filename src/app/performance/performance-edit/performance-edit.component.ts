@@ -6,6 +6,7 @@ import { NzMessageService } from 'ng-zorro-antd/message';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { AlertNotificationService } from '../../services/alert-notification.service';
 
 @Component({
   selector: 'app-performance-metrics-update',
@@ -31,7 +32,8 @@ export class PerformanceMetricsUpdateComponent implements OnInit {
     private message: NzMessageService,
     private userService: LeadService,
     private router: Router,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private alert: AlertNotificationService,
   ) {}
 
   ngOnInit(): void {
@@ -47,10 +49,9 @@ export class PerformanceMetricsUpdateComponent implements OnInit {
         this.performance = data;
         this.isLoading = false;
       },
-      (error) => {
-        console.error('Error loading performance metric', error);
-        this.isLoading = false;
-        this.message.error('Failed to load performance metric');
+      (error) => { 
+        this.isLoading = false; 
+        this.alert.alertNotification('Failed to load performance metric', 'error');
         this.router.navigate(['/performance'], { replaceUrl: true });
       }
     );
@@ -63,8 +64,8 @@ export class PerformanceMetricsUpdateComponent implements OnInit {
         this.users = data.data;
         this.isLoading = false;
       },
-      (error) => {
-        console.error('Error fetching users', error);
+      (error) => { 
+        this.alert.alertNotification('Error fetching users', 'error');
         this.isLoading = false;
       }
     );
@@ -74,14 +75,13 @@ export class PerformanceMetricsUpdateComponent implements OnInit {
     this.isLoading = true;
     this.performanceMetricsService.updatePerformance(this.metricId, this.performance).subscribe(
       () => {
-        this.isLoading = false;
-        this.message.success('Performance metric updated successfully!');
+        this.isLoading = false; 
+        this.alert.alertNotification('Performance metric updated successfully', 'success'); 
         this.router.navigate(['/performance'], { replaceUrl: true });
       },
       (error) => {
-        this.isLoading = false;
-        this.message.error('Failed to update performance metric');
-        console.error('Error updating performance metric', error);
+        this.isLoading = false; 
+        this.alert.alertNotification('Failed to update performance metric', 'error'); 
       }
     );
   }

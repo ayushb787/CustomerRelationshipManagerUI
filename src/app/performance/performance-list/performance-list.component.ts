@@ -6,6 +6,7 @@ import { NzMessageService } from 'ng-zorro-antd/message';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { AlertNotificationService } from '../../services/alert-notification.service';
 
 @Component({
   selector: 'app-performance-metrics-list',
@@ -20,7 +21,8 @@ export class PerformanceMetricsListComponent implements OnInit {
   constructor(
     private performanceMetricsService: PerformanceService,
     private message: NzMessageService,
-    private router: Router
+    private router: Router,
+    private alert: AlertNotificationService,
   ) {}
 
   ngOnInit(): void {

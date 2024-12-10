@@ -7,6 +7,7 @@ import { Customer } from '../../models/customer.model';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
+import { AlertNotificationService } from '../../services/alert-notification.service';
 
 @Component({
   selector: 'app-lead-edit',
@@ -33,7 +34,8 @@ export class LeadEditComponent implements OnInit {
     private route: ActivatedRoute,
     private leadService: LeadService,
     private customerService: CustomerService,
-    private router: Router
+    private router: Router,
+    private alert: AlertNotificationService,
   ) {}
 
   ngOnInit(): void {
@@ -47,27 +49,24 @@ export class LeadEditComponent implements OnInit {
 
            
           } else {
-            this.isLoading = false;
-            alert('Error fetching lead data');
+            this.isLoading = false; 
+            this.alert.alertNotification('Error fetching lead data', 'error');
           }
         },
         (error) => {
-          this.isLoading = false;
-          alert("Error fetching lead data");
-          console.error('Error fetching lead data:', error);
+          this.isLoading = false; 
+          this.alert.alertNotification('Error fetching lead data', 'error'); 
         }
       );
     }
-
-    // Fetch customers for the dropdown
+ 
     this.customerService.getCustomers().subscribe(
       (data: any) => {
-        this.customers = data.data; // Assuming customers data structure has `data`
+        this.customers = data.data;  
       },
       (error) => {
         this.isLoading = false;
-        alert("Error fetching customers");
-        console.error('Error fetching customers:', error);
+        this.alert.alertNotification('Error fetching customers', 'error');  
       }
     );
  
@@ -76,17 +75,15 @@ export class LeadEditComponent implements OnInit {
         this.users = response.data;  
          
         if (this.lead.assignedTo) {
-          const assignedUser = this.users.find(user => user.userId == this.lead.assignedTo);
-          console.log(assignedUser);
+          const assignedUser = this.users.find(user => user.userId == this.lead.assignedTo); 
           if (assignedUser) {
             this.lead.assignedTo = assignedUser.userId;  
           }
         }
       },
       (error) => {
-        this.isLoading = false;
-        alert("Error fetching users");
-        console.error('Error fetching users:', error);
+        this.isLoading = false; 
+        this.alert.alertNotification('Error fetching users', 'error');  
       }
     );
     this.isLoading = false;
@@ -101,9 +98,8 @@ export class LeadEditComponent implements OnInit {
           this.router.navigate(['/dashboard/leads'], {replaceUrl: true});
         },
         (error) => {
-          this.isLoading = false;
-          alert("Error updating lead");
-          console.error('Error updating lead:', error);
+          this.isLoading = false; 
+          this.alert.alertNotification('Error updating lead', 'error');  
         }
       );
     }

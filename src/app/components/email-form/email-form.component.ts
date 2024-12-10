@@ -7,6 +7,7 @@ import { NzButtonModule } from 'ng-zorro-antd/button';
 import { FormsModule } from '@angular/forms';
 import { NzInputModule } from 'ng-zorro-antd/input';  
 import { NzSpinComponent } from 'ng-zorro-antd/spin';
+import { AlertNotificationService } from '../../services/alert-notification.service';
 
 @Component({
   selector: 'app-email-form',
@@ -31,7 +32,8 @@ export class EmailFormComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private customerService: CustomerService
+    private customerService: CustomerService,
+    private alert: AlertNotificationService,
   ) {}
 
   ngOnInit(): void { 
@@ -46,14 +48,13 @@ export class EmailFormComponent implements OnInit {
     };
 
     this.customerService.sendEmail(this.customerId, payload).subscribe(
-      (response) => {
-        alert('Email sent successfully!');
+      (response) => { 
+        this.alert.alertNotification('Email sent successfully', 'success');
         this.router.navigate(['/dashboard/customers'], {replaceUrl: true});
         this.isLoading = false;
       },
-      (error) => {
-        console.error('Error sending email', error);
-        alert('Error sending email');
+      (error) => { 
+        this.alert.alertNotification('Error sending email', 'error');
         this.isLoading = false;
       }
     );

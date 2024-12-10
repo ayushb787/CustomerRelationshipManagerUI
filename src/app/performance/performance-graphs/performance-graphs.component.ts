@@ -6,6 +6,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { BaseChartDirective  } from 'ng2-charts';
 import { PieController, ArcElement, Tooltip, Legend } from 'chart.js';
+import { AlertNotificationService } from '../../services/alert-notification.service';
 
 
 @Component({
@@ -70,7 +71,8 @@ export class PerformanceGraphsComponent implements OnInit {
     },
   };
 
-  constructor(private performanceMetricsService: PerformanceService) {}
+  constructor(private performanceMetricsService: PerformanceService,
+    private alert: AlertNotificationService,) {}
 
   ngOnInit(): void {
     this.loadChartData();
@@ -84,8 +86,7 @@ export class PerformanceGraphsComponent implements OnInit {
 
   loadUserWiseData(): void {
     this.performanceMetricsService.getPerformances().subscribe(
-      (data) => {
-        console.log('User-wise data:', data);
+      (data) => { 
         const groupedByUser = this.groupBy(data.data, 'userId');
         this.userWiseChartLabels = Object.keys(groupedByUser);
         this.userWiseChartData = {
@@ -99,11 +100,10 @@ export class PerformanceGraphsComponent implements OnInit {
               backgroundColor: '#6394f9',
             },
           ],
-        };
-        console.log('Chart Data:', this.userWiseChartData);
+        }; 
       },
-      (error) => {
-        console.error('Error loading user-wise data', error);
+      (error) => { 
+        this.alert.alertNotification('Error loading user-wise data', 'error'); 
       }
     );
   }
@@ -111,8 +111,7 @@ export class PerformanceGraphsComponent implements OnInit {
 
   loadDateWiseData(): void {
     this.performanceMetricsService.getPerformances().subscribe(
-      (data) => {
-        console.log(data.data);
+      (data) => { 
         const groupedByDate = this.groupBy(data.data, 'date');
         this.dateWiseChartLabels = Object.keys(groupedByDate);
         this.dateWiseChartData = {
@@ -130,8 +129,8 @@ export class PerformanceGraphsComponent implements OnInit {
           ],
         };
       },
-      (error) => {
-        console.error('Error loading date-wise data', error);
+      (error) => { 
+        this.alert.alertNotification('Error loading date-wise data', 'error'); 
       }
     );
   }
@@ -154,8 +153,8 @@ export class PerformanceGraphsComponent implements OnInit {
           ],
         };
       },
-      (error) => {
-        console.error('Error loading metric-type wise data', error);
+      (error) => { 
+        this.alert.alertNotification('Error loading metric-type wise data', 'error'); 
       }
     );
   }

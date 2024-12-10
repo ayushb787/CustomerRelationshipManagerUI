@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { environment } from './environment';
+import { AlertNotificationService } from './alert-notification.service';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +12,8 @@ export class PerformanceService {
 
   private apiUrl = `${environment.baseUrl}/api/performance-metrics`;
   
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient,
+    private alert: AlertNotificationService,) {}
 
   private getToken(): string | null {
     return localStorage.getItem('token');
@@ -28,8 +30,8 @@ export class PerformanceService {
         .map(([field, message]) => `${message}`)
         .join('\n');
     }
-
-    alert(alertMessage); 
+ 
+    this.alert.alertNotification(alertMessage, 'error');
     return throwError(() => new Error(errorMessage));
   }
 

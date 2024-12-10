@@ -4,6 +4,7 @@ import { NzCardComponent } from 'ng-zorro-antd/card';
 import { NavbarComponent } from '../../shared/navbar/navbar.component';
 import { Router, RouterModule } from '@angular/router';
 import { PerformanceMetricsCreateComponent } from "../../performance/performance-create/performance-create.component";
+import { AlertNotificationService } from '../../services/alert-notification.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -13,7 +14,8 @@ import { PerformanceMetricsCreateComponent } from "../../performance/performance
   styleUrl: './dashboard.component.css'
 })
 export class DashboardComponent {
-  constructor(private router: Router) {}
+  constructor(private router: Router,
+    private alert: AlertNotificationService,) {}
  
   isAdmin = false;
 

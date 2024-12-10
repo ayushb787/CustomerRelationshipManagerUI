@@ -3,6 +3,7 @@ import { CustomerService } from '../../services/customer.service';
 import { Router } from '@angular/router'; 
 import { CommonModule } from '@angular/common';
 import { NzTableModule, NzTableQueryParams } from 'ng-zorro-antd/table';
+import { AlertNotificationService } from '../../services/alert-notification.service';
 
 @Component({
   selector: 'app-customer-list',
@@ -39,7 +40,8 @@ export class CustomerListComponent implements OnInit {
 
   constructor(
     private customerService: CustomerService,
-    private router: Router 
+    private router: Router ,
+    private alert: AlertNotificationService,
   ) {}
 
   ngOnInit(): void {
@@ -47,50 +49,22 @@ export class CustomerListComponent implements OnInit {
     if (this.token) {
       this.getPaginatedCustomers();
     } else {
-      alert('Token is not available');
-    }
-  }
-  //old function 
-  getCustomers(): void {
-    this.loading = true;
-    if (this.token) {
-      this.customerService.getCustomers().subscribe(
-        (response: any) => {
-          this.customers = response.data || [];
-          this.filteredCustomers = [...this.customers];  
-          this.loading = false;
-        },
-        (error) => {
-          alert('Error fetching customers');
-          console.error('Error fetching customers', error);
-          this.loading = false;
-        }
-      );
+      this.alert.alertNotification('Token not available', 'error');
     }
   }
 
-  onQueryParamsChange(params: NzTableQueryParams): void {
-    const { pageSize, pageIndex } = params;
-    this.pageSize = pageSize;
-    this.pageIndex = pageIndex;
-    this.getPaginatedCustomers();
-  }
-  //new function with pagination
   getPaginatedCustomers(): void {
     this.loading = true;
     if (this.token) {
       this.customerService.getPaginatedCustomers(this.pageIndex, this.pageSize).subscribe(
-        (response: any) => {
-          console.log( response);
+        (response: any) => { 
           this.customers = response.data.content || []; 
           this.filteredCustomers = [...this.customers]; 
-          this.total = response.data.page.totalPages || 0; 
-          console.log(this.customers);
-          this.loading = false;
+          this.total = response.data.page.totalPages || 0;  
+          this.loading = false; 
         },
-        (error) => {
-          alert('Error fetching paginated customers');
-          console.error('Error fetching paginated customers', error);
+        (error) => {  
+          this.alert.alertNotification('Error fetching paginated customers', 'error');
           this.loading = false;
         }
       );
@@ -106,12 +80,12 @@ export class CustomerListComponent implements OnInit {
     if (this.token) {
       if (confirm('Are you sure you want to delete this lead?')){
       this.customerService.deleteCustomer(id).subscribe(
-        (response) => {
-          alert('Customer deleted successfully');
-          // this.getCustomers();  
+        (response) => { 
+          this.alert.alertNotification('Customer deleted successfully', 'error');
+          this.getPaginatedCustomers();  
         },
-        (error) => {
-          console.error('Error deleting customer', error);
+        (error) => { 
+          this.alert.alertNotification('Error deleting customer', 'error');
         }
       );
     }
@@ -127,20 +101,6 @@ export class CustomerListComponent implements OnInit {
              (preferenceMatch || this.preferences.every(preference => !preference.selected));
     });
   }
- 
-
-  sortName = (a: any, b: any): number => {
-    const nameA = a.name.toLowerCase();
-    const nameB = b.name.toLowerCase();
-
-    if (nameA < nameB) {
-      return -1;
-    }
-    if (nameA > nameB) {
-      return 1;
-    }
-    return 0;
-  };
 
 
   sendEmail(customerId: string): void {

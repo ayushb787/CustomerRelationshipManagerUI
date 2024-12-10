@@ -4,6 +4,7 @@ import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { Notification } from '../models/notification.model';
 import { environment } from './environment';
+import { AlertNotificationService } from './alert-notification.service';
 
 @Injectable({
   providedIn: 'root',
@@ -11,7 +12,8 @@ import { environment } from './environment';
 export class NotificationService {
   private apiUrl = `${environment.baseUrl}/api/notifications`;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient,
+    private alert: AlertNotificationService,) {}
 
   private getToken(): string | null {
     return localStorage.getItem('token');
@@ -23,17 +25,16 @@ export class NotificationService {
   }
 
   private handleError(error: any): Observable<never> {
-    const errorMessage = error.error.message || 'An error occurred';
-    console.error(`Error: ${errorMessage}`, error);
-
-    alert(errorMessage); 
+    const errorMessage = error.error.message || 'An error occurred'; 
+ 
+    this.alert.alertNotification(errorMessage, 'error');
     return throwError(() => new Error(errorMessage));
   }
 
   private getAuthHeaders(): HttpHeaders {
     const token = this.getToken();
-    if (!token) {
-      alert('Authentication required. Redirecting to login.');
+    if (!token) { 
+      this.alert.alertNotification('Authentication required. Redirecting to login', 'error');
       throw new Error('Authentication token is missing');
     }
     return new HttpHeaders().set('Authorization', `Bearer ${token}`);

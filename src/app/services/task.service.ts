@@ -4,6 +4,7 @@ import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { Task } from '../models/task.model';
 import { environment } from './environment';
+import { AlertNotificationService } from './alert-notification.service';
 
 @Injectable({
   providedIn: 'root',
@@ -11,7 +12,8 @@ import { environment } from './environment';
 export class TaskService {
   private apiUrl = `${environment.baseUrl}/api/tasks`;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient,
+    private alert: AlertNotificationService,) {}
 
   private getToken(): string | null {
     return localStorage.getItem('token');
@@ -41,15 +43,15 @@ export class TaskService {
         .map(([field, message]) => `${message}`)
         .join('\n');
     }
-
-    alert(alertMessage); 
+ 
+    this.alert.alertNotification(alertMessage, 'error');
     return throwError(() => new Error(errorMessage));
   }
 
   private getAuthHeaders(): HttpHeaders {
     const token = this.getToken();
-    if (!token) {
-      alert('Authentication required. Redirecting to login.');
+    if (!token) { 
+      this.alert.alertNotification('Authentication required. Redirecting to login.', 'error');
       throw new Error('Authentication token is missing');
     }
     return new HttpHeaders().set('Authorization', `Bearer ${token}`);
@@ -93,8 +95,7 @@ export class TaskService {
     );
   }
 
-  createTask(task: Partial<Task>): Observable<Task> {
-    console.log(task);
+  createTask(task: Partial<Task>): Observable<Task> { 
     const headers = this.getAuthHeaders();
     return this.http.post<Task>(`${this.apiUrl}/create`, task, { headers }).pipe(
       catchError(this.handleError)

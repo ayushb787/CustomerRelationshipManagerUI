@@ -7,6 +7,7 @@ import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { NzMessageService } from 'ng-zorro-antd/message';
+import { AlertNotificationService } from '../../services/alert-notification.service';
 
 @Component({
   selector: 'app-task-create',
@@ -31,7 +32,8 @@ export class TaskCreateComponent implements OnInit {
     private taskService: TaskService,
     private userService: LeadService,  
     private message: NzMessageService,
-    private router: Router
+    private router: Router,
+    private alert: AlertNotificationService,
   ) {}
 
   ngOnInit(): void {
@@ -43,9 +45,8 @@ export class TaskCreateComponent implements OnInit {
         this.isLoading = false;  
       },
       (error) => {
-        this.isLoading = false;
-        alert("Error fetching users");
-        console.error('Error fetching users:', error);
+        this.isLoading = false; 
+        this.alert.alertNotification('Error fetching users', 'error'); 
       }
     );
   }
@@ -58,9 +59,8 @@ export class TaskCreateComponent implements OnInit {
       this.router.navigate(['/dashboard/all-tasks'], { replaceUrl: true });
     },
     (error) => {
-      this.isLoading = false;
-      this.message.error('Failed to add task');
-      console.error('Error creating new task', error);
+      this.isLoading = false; 
+      this.alert.alertNotification('Failed to add task', 'error'); 
     }
   );
   }

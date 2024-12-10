@@ -9,6 +9,7 @@ import { CommonModule } from '@angular/common';
 import { NzCardComponent } from 'ng-zorro-antd/card';
 import { environment } from '../../services/environment';
 import { NzSpinComponent } from 'ng-zorro-antd/spin';
+import { AlertNotificationService } from '../../services/alert-notification.service';
 
 @Component({
   selector: 'app-login',
@@ -29,7 +30,8 @@ import { NzSpinComponent } from 'ng-zorro-antd/spin';
 export class LoginComponent {
   loginForm: FormGroup;
   isLoading = false;
-  constructor(private fb: FormBuilder, private http: HttpClient, private router: Router) {
+  constructor(private fb: FormBuilder, private http: HttpClient, private router: Router,
+    private alert: AlertNotificationService,) {
     this.loginForm = this.fb.group({
       username: ['', [Validators.required]],
       password: ['', [Validators.required]]
@@ -38,8 +40,7 @@ export class LoginComponent {
 
   onSubmit(): void {
     this.isLoading = true;
-    if (this.loginForm.valid) {
-      console.log(this.loginForm.value);
+    if (this.loginForm.valid) { 
       this.http.post(`${environment.baseUrl}/api/auth/login`, this.loginForm.value).subscribe({
         next: (response: any) => {
           if (response.success) {
@@ -51,14 +52,13 @@ export class LoginComponent {
             this.isLoading = false;
             this.router.navigate(['/dashboard'], {replaceUrl: true});
           } else {
-            this.isLoading = false;
-            alert('Login failed: ' + response.message);
+            this.isLoading = false; 
+            this.alert.alertNotification('Login failed' + response.data.message, 'error');
           }
         },
         error: (err) => {
-          this.isLoading = false;
-          console.log(err);
-          alert('Login failed: ' + err.error.message);
+          this.isLoading = false; 
+          this.alert.alertNotification('Login failed' + err.error.message, 'error');
         }
       });
     }

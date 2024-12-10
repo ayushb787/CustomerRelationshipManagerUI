@@ -1,0 +1,19 @@
+<div
+  *ngIf="messageType"
+  class="fixed top-0 right-0 m-4 p-4 rounded-md shadow-lg animate__animated animate__faster"
+  [ngClass]="{
+    'animate__fadeInRight': messageType,
+    'animate__fadeOutRight': !messageType,
+    'bg-green-500': messageType === 'success',
+    'bg-red-500': messageType === 'error',
+    'text-white': true
+  }"
+>
+  <div class="flex items-center">
+    <i class="mr-2" [ngClass]="{
+      'fa fa-check-circle': messageType === 'success',
+      'fa fa-exclamation-circle': messageType === 'error'
+    }"></i>
+    <span>{{ message }}</span>
+  </div>
+</div>

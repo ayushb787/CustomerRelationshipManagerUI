@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { AlertNotificationService } from '../../services/alert-notification.service';
 
 @Component({
   selector: 'app-profile',
@@ -11,7 +12,8 @@ export class ProfileComponent {
   username: string = localStorage.getItem('username') || 'User';
   role: string = localStorage.getItem('role') || 'User';
 
-  constructor(private router: Router) {}
+  constructor(private router: Router,
+    private alert: AlertNotificationService,) {}
 
   onLogout(): void {
     // Logout confirmation

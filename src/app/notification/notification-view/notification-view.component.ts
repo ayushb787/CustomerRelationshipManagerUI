@@ -4,7 +4,7 @@ import { Notification } from '../../models/notification.model';
 import { NzSpinComponent } from 'ng-zorro-antd/spin';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-
+import { AlertNotificationService } from '../../services/alert-notification.service';
 @Component({
   selector: 'app-notifications',
   standalone: true,
@@ -19,7 +19,8 @@ export class NotificationViewComponent implements OnInit {
 
   constructor(
     private notificationService: NotificationService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private alert: AlertNotificationService,
   ) {}
 
   ngOnInit(): void {
@@ -28,8 +29,8 @@ export class NotificationViewComponent implements OnInit {
 
   fetchNotifications(): void {
     const userId = Number(localStorage.getItem('userId'));
-    if (!userId) {
-      alert('User ID missing!');
+    if (!userId) { 
+      this.alert.alertNotification('User ID missing', 'error');
       return;
     }
 
@@ -39,8 +40,7 @@ export class NotificationViewComponent implements OnInit {
         this.notifications = data.data;
         this.loading = false;
       },
-      (error) => {
-        console.error(error);
+      (error) => { 
         this.loading = false;
       }
     );
@@ -60,8 +60,8 @@ export class NotificationViewComponent implements OnInit {
           );
           this.cdr.detectChanges();
         },
-        (error) => {
-          console.error(error);
+        (error) => { 
+          this.alert.alertNotification(error, 'error'); 
         }
       );
     }

@@ -4,6 +4,7 @@ import { NzMenuModule } from 'ng-zorro-antd/menu';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { NotificationViewComponent } from "../../notification/notification-view/notification-view.component";
+import { AlertNotificationService } from '../../services/alert-notification.service';
 
 @Component({
   selector: 'app-navbar',
@@ -24,7 +25,8 @@ export class NavbarComponent implements OnInit {
   isTasksSelected: boolean = false;
   isPerformanceSelected: boolean = false;
 
-  constructor(private router: Router) {}
+  constructor(private router: Router,
+    private alert: AlertNotificationService,) {}
 
   ngOnInit(): void {
     this.setSelectedMenu();
