@@ -17,7 +17,11 @@ import { TaskListComponent } from './tasks/task-list/task-list.component';
 import { TaskEditComponent } from './tasks/task-edit/task-edit.component';
 import { TaskAllListComponent } from './tasks/task-all-list/task-all-list.component';
 import { ProfileComponent } from './shared/profile/profile.component';
-
+import { PerformanceMetricsCreateComponent } from './performance/performance-create/performance-create.component';
+import { PerformanceMetricsListComponent } from './performance/performance-list/performance-list.component';
+import { PerformanceMetricsUpdateComponent } from './performance/performance-edit/performance-edit.component';
+import { PerformanceGraphsComponent } from './performance/performance-graphs/performance-graphs.component';
+import { NotificationViewComponent } from './notification/notification-view/notification-view.component';
 
 export const routes: Routes = [
   { path: 'login', component: LoginComponent, canActivate: [RedirectGuard] },  
@@ -35,5 +39,10 @@ export const routes: Routes = [
   { path: 'dashboard/tasks', component: TaskListComponent, canActivate: [AuthGuard] },
   { path: 'dashboard/all-tasks', component: TaskAllListComponent, canActivate: [AuthGuard, AdminGuard] },
   { path: 'dashboard/tasks/:id', component: TaskEditComponent, canActivate: [AuthGuard] },
+  { path: 'dashboard/performance/create', component: PerformanceMetricsCreateComponent, canActivate: [AuthGuard] },
+  { path: 'dashboard/performance', component: PerformanceMetricsListComponent, canActivate: [AuthGuard] },
+  // { path: 'dashboard/performance/graphs', component: PerformanceGraphsComponent, canActivate: [AuthGuard] },
+  // { path: 'dashboard/performance/:id', component: PerformanceMetricsUpdateComponent, canActivate: [AuthGuard] },
+  {path: 'dashboard/notification', component: NotificationViewComponent, canActivate: [AuthGuard]},
   { path: '', redirectTo: '/login', pathMatch: 'full' }  
 ];

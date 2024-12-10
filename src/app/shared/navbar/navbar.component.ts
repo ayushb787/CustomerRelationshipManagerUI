@@ -3,11 +3,12 @@ import { Router } from '@angular/router';
 import { NzMenuModule } from 'ng-zorro-antd/menu';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { NotificationViewComponent } from "../../notification/notification-view/notification-view.component";
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [CommonModule, NzMenuModule, RouterModule],
+  imports: [CommonModule, NzMenuModule, RouterModule, NotificationViewComponent],
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.css']
 })

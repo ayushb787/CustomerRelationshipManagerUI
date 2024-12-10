@@ -1,0 +1,51 @@
+<div class="relative z-50"> 
+    <button
+      class="relative"
+      (mouseenter)="toggleNotifications(true)" 
+      (mouseleave)="toggleNotifications(false)"
+    >
+      <i nz-icon nzType="bell" nzTheme="outline"></i>
+      <span
+        *ngIf="getUnreadCount() > 0"
+        class="absolute top-0 right-0 bg-red-500 text-white text-xs rounded-full h-4 w-4 flex items-center justify-center"
+      >
+        {{ getUnreadCount() }}
+      </span>
+      <div
+      *ngIf="showNotifications"
+      class="absolute left-0 mt-2 w-96 bg-white border border-gray-300 shadow-lg rounded-lg"
+      (mouseenter)="toggleNotifications(true)" 
+      (mouseleave)="toggleNotifications(false)"
+    >
+      <div *ngIf="loading" class="p-4 text-center">
+        <nz-spin nzSize="small"></nz-spin>
+      </div>
+      <div *ngIf="!loading && notifications.length === 0" class="p-4 text-center text-gray-500">
+        No notifications available.
+      </div>
+      <div *ngIf="!loading && notifications.length > 0">
+        <ul>
+          <li
+            *ngFor="let notification of notifications"
+            class="p-4 border-b border-gray-200 flex justify-between items-center"
+            [class.bg-gray-100]="!notification.readStatus"
+          > 
+            <div>
+              <p>{{ notification.message }}</p>
+              <p class="text-xs text-gray-500">{{ notification.dateSent | date:'medium' }}</p>
+            </div>
+            <button
+              *ngIf="!notification.readStatus"
+              class="text-blue-500 text-sm"
+              (click)="markAsRead(notification.notificationId)"
+            >
+              Mark as Read
+            </button>
+          </li>
+        </ul>
+      </div>
+    </div>
+    </button> 
+   
+  </div>
+  

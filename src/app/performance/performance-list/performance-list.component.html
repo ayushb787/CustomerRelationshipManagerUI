@@ -1,0 +1,43 @@
+<div class="container mx-auto p-4">
+    <h2 class="text-2xl font-semibold mb-4 text-gray-800">Performance Metrics</h2>
+    <div class="shadow-lg rounded-lg bg-white p-4">
+      <nz-table
+        [nzData]="metrics"
+        [nzLoading]="loading"
+        [nzFrontPagination]="false"
+      >
+        <thead>
+          <tr>
+            <th nzColumnKey="metricId">Metric ID</th>
+            <th nzColumnKey="userId">User ID</th>
+            <th nzColumnKey="metricType">Metric Type</th>
+            <th nzColumnKey="value">Value</th>
+            <th nzColumnKey="date">Date</th>
+            <th nzColumnKey="remarks">Remarks</th>
+            <!-- <th nzColumnKey="action">Actions</th> -->
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let metric of metrics">
+            <td>{{ metric.metricId }}</td>
+            <td>{{ metric.userId }}</td>
+            <td>{{ metric.metricType }}</td>
+            <td>{{ metric.value }}</td>
+            <td>{{ metric.date | date: 'MMM d, y' }}</td>
+            <td>{{ metric.remarks }}</td>
+            <!-- <td class="px-4 py-2 text-center">
+              <div class="flex justify-start items-center space-x-4">
+                <button 
+                  class="text-blue-500 hover:text-blue-700"
+                  (click)="editPerformance(metric.metricId)">
+                  <i class="fas fa-edit"></i>
+                </button>
+                
+              </div>
+            </td> -->
+          </tr>
+        </tbody>
+      </nz-table>
+    </div>
+  </div>
+  

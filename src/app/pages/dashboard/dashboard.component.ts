@@ -3,11 +3,12 @@ import { CommonModule } from '@angular/common';
 import { NzCardComponent } from 'ng-zorro-antd/card';
 import { NavbarComponent } from '../../shared/navbar/navbar.component';
 import { Router, RouterModule } from '@angular/router';
+import { PerformanceMetricsCreateComponent } from "../../performance/performance-create/performance-create.component";
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, NzCardComponent, NavbarComponent, RouterModule],
+  imports: [CommonModule, NzCardComponent, NavbarComponent, RouterModule, PerformanceMetricsCreateComponent],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css'
 })
