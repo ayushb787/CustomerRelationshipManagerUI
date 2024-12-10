@@ -22,6 +22,7 @@ export class NavbarComponent implements OnInit {
   isLeadsSelected: boolean = false;
   isCustomersSelected: boolean = false;
   isTasksSelected: boolean = false;
+  isPerformanceSelected: boolean = false;
 
   constructor(private router: Router) {}
 
@@ -36,6 +37,7 @@ export class NavbarComponent implements OnInit {
     this.isLeadsSelected = currentUrl.includes('/dashboard/leads');
     this.isCustomersSelected = currentUrl.includes('/dashboard/customers');
     this.isTasksSelected = currentUrl.includes('/dashboard/tasks') || currentUrl.includes('/dashboard/all-tasks');
+    this.isPerformanceSelected = currentUrl.includes('/dashboard/performances')
   }
 
   onLogout(): void {

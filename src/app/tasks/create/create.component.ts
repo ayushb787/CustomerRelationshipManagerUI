@@ -6,6 +6,7 @@ import { Task } from '../../models/task.model';
 import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { NzMessageService } from 'ng-zorro-antd/message';
 
 @Component({
   selector: 'app-task-create',
@@ -29,6 +30,7 @@ export class TaskCreateComponent implements OnInit {
   constructor(
     private taskService: TaskService,
     private userService: LeadService,  
+    private message: NzMessageService,
     private router: Router
   ) {}
 
@@ -50,9 +52,16 @@ export class TaskCreateComponent implements OnInit {
 
   createTask(): void {
     this.isLoading = true;
-    this.taskService.createTask(this.task).subscribe(() => {
+    this.taskService.createTask(this.task).subscribe(
+      () => {
       this.isLoading = false;
       this.router.navigate(['/dashboard/all-tasks'], { replaceUrl: true });
-    });
+    },
+    (error) => {
+      this.isLoading = false;
+      this.message.error('Failed to add task');
+      console.error('Error creating new task', error);
+    }
+  );
   }
 }

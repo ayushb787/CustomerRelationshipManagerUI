@@ -32,9 +32,17 @@ export class TaskService {
 
   private handleError(error: any): Observable<never> {
     const errorMessage = error.error.message || 'An error occurred';
-    console.error(`Error: ${errorMessage}`, error);
+    const errorData = error.error.data || {};
 
-    alert(errorMessage); 
+    let alertMessage = errorMessage;
+
+    if (Object.keys(errorData).length > 0) {
+      alertMessage += '\n' + Object.entries(errorData)
+        .map(([field, message]) => `${message}`)
+        .join('\n');
+    }
+
+    alert(alertMessage); 
     return throwError(() => new Error(errorMessage));
   }
 
@@ -56,6 +64,14 @@ export class TaskService {
     );
   }
 
+  getPaginatedTasksBySalesperson(page: number, pageSize: number): Observable<Task[]> {
+    const headers = this.getAuthHeaders();
+    const salespersonId = this.getUserId();
+    return this.http.get<Task[]>(`${this.apiUrl}/salesperson/${salespersonId}?page=${page}&size=${pageSize}`, { headers }).pipe(
+      catchError(this.handleError)
+    );
+  }
+
   getTaskById(taskId: string): Observable<Task> {
     const headers = this.getAuthHeaders();
     return this.http.get<Task>(`${this.apiUrl}/${taskId}`, { headers }).pipe(
@@ -66,6 +82,13 @@ export class TaskService {
   getAllTasks(): Observable<Task[]> {
     const headers = this.getAuthHeaders();
     return this.http.get<Task[]>(`${this.apiUrl}/all`, { headers }).pipe(
+      catchError(this.handleError)
+    );
+  }
+
+  getAllPaginatedTasks(page: number, pageSize: number): Observable<Task[]> {
+    const headers = this.getAuthHeaders();
+    return this.http.get<Task[]>(`${this.apiUrl}/all?page=${page}&size=${pageSize}`, { headers }).pipe(
       catchError(this.handleError)
     );
   }

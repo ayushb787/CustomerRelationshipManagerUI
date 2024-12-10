@@ -16,9 +16,10 @@ export class CustomerListComponent implements OnInit {
   customers: any[] = [];
   filteredCustomers: any[] = [];
   token: string | null = '';
-  pageSize = 100;
-  pageIndex = 1;
+  pageSize = 10;
+  pageIndex = 0;
   total = 0;
+  maxPage = 0;
   loading = true;
 
   categories = [
@@ -44,12 +45,12 @@ export class CustomerListComponent implements OnInit {
   ngOnInit(): void {
     this.token = localStorage.getItem('token');  
     if (this.token) {
-      this.getCustomers();
+      this.getPaginatedCustomers();
     } else {
       alert('Token is not available');
     }
   }
-
+  //old function 
   getCustomers(): void {
     this.loading = true;
     if (this.token) {
@@ -68,6 +69,35 @@ export class CustomerListComponent implements OnInit {
     }
   }
 
+  onQueryParamsChange(params: NzTableQueryParams): void {
+    const { pageSize, pageIndex } = params;
+    this.pageSize = pageSize;
+    this.pageIndex = pageIndex;
+    this.getPaginatedCustomers();
+  }
+  //new function with pagination
+  getPaginatedCustomers(): void {
+    this.loading = true;
+    if (this.token) {
+      this.customerService.getPaginatedCustomers(this.pageIndex, this.pageSize).subscribe(
+        (response: any) => {
+          console.log( response);
+          this.customers = response.data.content || []; 
+          this.filteredCustomers = [...this.customers]; 
+          this.total = response.data.page.totalPages || 0; 
+          console.log(this.customers);
+          this.loading = false;
+        },
+        (error) => {
+          alert('Error fetching paginated customers');
+          console.error('Error fetching paginated customers', error);
+          this.loading = false;
+        }
+      );
+    }
+  }
+  
+
   viewCustomer(id: string): void {
     this.router.navigate([`dashboard/customers/${id}`], {replaceUrl: true});
   }
@@ -78,7 +108,7 @@ export class CustomerListComponent implements OnInit {
       this.customerService.deleteCustomer(id).subscribe(
         (response) => {
           alert('Customer deleted successfully');
-          this.getCustomers();  
+          // this.getCustomers();  
         },
         (error) => {
           console.error('Error deleting customer', error);
@@ -97,12 +127,7 @@ export class CustomerListComponent implements OnInit {
              (preferenceMatch || this.preferences.every(preference => !preference.selected));
     });
   }
-
-  onQueryParamsChange(params: NzTableQueryParams): void {
-    const { pageSize, pageIndex } = params;
-    this.pageSize = pageSize;
-    this.pageIndex = pageIndex;
-  }
+ 
 
   sortName = (a: any, b: any): number => {
     const nameA = a.name.toLowerCase();
@@ -121,4 +146,21 @@ export class CustomerListComponent implements OnInit {
   sendEmail(customerId: string): void {
     this.router.navigate([`dashboard/customers/email/${customerId}`], {replaceUrl:true});
   }
+
+
+  onPreviousPage(): void {
+    if (this.pageIndex > 0) {
+      this.pageIndex--;
+      this.getPaginatedCustomers();
+    }
+  }
+  
+  onNextPage(): void { 
+    const maxPage = Math.ceil(this.total / this.pageSize);
+    if (this.pageIndex < maxPage-1) {
+      this.pageIndex++;
+      this.getPaginatedCustomers();
+    }
+  }
+  
 }

@@ -12,39 +12,33 @@ export class LeadService {
   private apiUrl = `${environment.baseUrl}/api/leads`;
 
   constructor(private http: HttpClient) {}
-
-  // Helper method to get the token from localStorage
+ 
   private getToken(): string | null {
     return localStorage.getItem('token');
   }
-
-  // Validate the token
+ 
   private validateToken(): boolean {
     const token = this.getToken();
-    return token !== null; // Add expiration checks here if needed
+    return token !== null; 
   }
-
-  // Handle errors and notify the user
+ 
   private handleError(error: any): Observable<never> {
     const errorMessage = error.error.message || 'An error occurred';
     console.error(`Error: ${errorMessage}`, error);
 
-    alert(errorMessage); // Replace with a toast notification system
+    alert(errorMessage);  
     return throwError(() => new Error(errorMessage));
   }
-
-  // Helper method to get authorization headers
+ 
   private getAuthHeaders(): HttpHeaders {
     const token = this.getToken();
     if (!token) {
-      alert('Authentication required. Redirecting to login.');
-      // Redirect logic here (optional)
+      alert('Authentication required. Redirecting to login.'); 
       throw new Error('Authentication token is missing');
     }
     return new HttpHeaders().set('Authorization', `Bearer ${token}`);
   }
-
-  // Fetch all leads
+ 
   getLeads(): Observable<Lead[]> {
     const headers = this.getAuthHeaders();
     return this.http.get<Lead[]>(this.apiUrl, { headers }).pipe(
@@ -52,31 +46,34 @@ export class LeadService {
     );
   }
 
-  // Fetch a specific lead by ID
+  getPaginatedLeads(page: number, pageSize: number): Observable<Lead[]> {
+    const headers = this.getAuthHeaders();
+    return this.http.get<Lead[]>(`${this.apiUrl}?page=${page}&size=${pageSize}`, { headers }).pipe(
+      catchError(this.handleError)
+    );
+  }
+
   getLeadById(leadId: number): Observable<Lead> {
     const headers = this.getAuthHeaders();
     return this.http.get<Lead>(`${this.apiUrl}/${leadId}`, { headers }).pipe(
       catchError(this.handleError)
     );
   }
-
-  // Create a new lead
+ 
   createLead(lead: Partial<Lead>): Observable<Lead> {
     const headers = this.getAuthHeaders();
     return this.http.post<Lead>(this.apiUrl, lead, { headers }).pipe(
       catchError(this.handleError)
     );
   }
-
-  // Update an existing lead
+ 
   updateLead(leadId: number, lead: Partial<Lead>): Observable<Lead> {
     const headers = this.getAuthHeaders();
     return this.http.put<Lead>(`${this.apiUrl}/${leadId}`, lead, { headers }).pipe(
       catchError(this.handleError)
     );
-  }
+  } 
 
-  // Delete a lead
   deleteLead(leadId: number): Observable<void> {
     const headers = this.getAuthHeaders();
     return this.http.delete<void>(`${this.apiUrl}/${leadId}`, { headers }).pipe(

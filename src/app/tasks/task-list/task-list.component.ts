@@ -6,71 +6,112 @@ import { NzSpinModule } from 'ng-zorro-antd/spin';
 import { NzTableModule, NzTableQueryParams } from 'ng-zorro-antd/table';
 import { Task } from '../../models/task.model';
 import { Router } from '@angular/router';
+import { LeadService } from '../../services/lead.service';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-task-list',
   standalone: true,
   imports: [FormsModule, CommonModule, NzSpinModule, NzTableModule],
+  providers: [DatePipe],
   templateUrl: './task-list.component.html',
   styleUrls: ['./task-list.component.css']
 })
 export class TaskListComponent implements OnInit {
   tasks: Task[] = [];
   loading = false;
+  token: string | null = '';
   total = 0;
   pageSize = 10;
-  pageIndex = 1;
+  pageIndex = 0;
   userId = '';
-  constructor(private taskService: TaskService, private router: Router) {}
+  users: any[] = [];
+
+  constructor(
+    private taskService: TaskService, private router: Router,
+    private leadService: LeadService,
+    private datePipe: DatePipe) { }
 
   ngOnInit(): void {
-    this.fetchTasks();
+    this.token = localStorage.getItem('token');
+    if (this.token) {
+      this.getPaginatedTasks();
+      this.loadUsers();
+    } else {
+      alert('Token is not available');
+    }
   }
- 
-  fetchTasks(): void {
-    this.loading = true; 
-    this.taskService.getTasksBySalesperson().subscribe(
-      (response: any) => {
-        console.log(response);
-        this.tasks = response.data;
-        this.total = response.total;
-        this.loading = false;
+
+  //new function with pagination
+  getPaginatedTasks(): void {
+    this.loading = true;
+    if (this.token) {
+      this.taskService.getPaginatedTasksBySalesperson(this.pageIndex, this.pageSize).subscribe(
+        (response: any) => {
+          this.tasks = response.data.content || [];
+          this.total = response.data.page.totalPages || 0;
+          console.log(this.tasks);
+          this.loading = false;
+        },
+        (error) => {
+          alert('Error fetching paginated tasks');
+          console.error('Error fetching paginated tasks', error);
+          this.loading = false;
+        }
+      );
+    }
+  }
+
+
+  loadUsers(): void {
+    this.leadService.getUsers().subscribe(
+      (data: any) => {
+        this.users = data.data;
       },
       (error) => {
-        this.loading = false;
-        console.error('Error fetching tasks:', error);
+        console.error('Error fetching users:', error);
       }
     );
   }
- 
-  onQueryParamsChange(params: any): void {
-    this.pageIndex = params.pageIndex;
-    this.pageSize = params.pageSize;
-    this.fetchTasks();
+
+  getAssignedUsername(userId: number): string {
+    const user = this.users.find(u => u.userId === userId);
+    return user ? user.username : 'Unknown User';
   }
- 
-  getAssignedUsername(userId: number): string { 
-    return `User ${userId}`; 
-  }
- 
+
   formatDate(date: string): string {
-    return new Date(date).toLocaleDateString();
+    return this.datePipe.transform(date, 'MMM d, y, h:mm:ss a') || '';
   }
- 
+
   viewTask(taskId: number): void {
     this.router.navigate([`dashboard/tasks/${taskId}`], { replaceUrl: true });
   }
- 
+
   deleteTask(taskId: number): void {
     if (confirm('Are you sure you want to delete this task?')) {
       this.taskService.deleteTask(taskId).subscribe(
         () => {
-          this.fetchTasks(); 
+          this.getPaginatedTasks();
         },
         (error) => {
           console.error('Error deleting task:', error);
         }
       );
+    }
+  }
+
+  onPreviousPage(): void {
+    if (this.pageIndex > 0) {
+      this.pageIndex--;
+      this.getPaginatedTasks();
+    }
+  }
+
+  onNextPage(): void {
+    const maxPage = Math.ceil(this.total / this.pageSize);
+    if (this.pageIndex < maxPage) {
+      this.pageIndex++;
+      this.getPaginatedTasks();
     }
   }
 }

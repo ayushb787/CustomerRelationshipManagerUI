@@ -30,73 +30,64 @@ export class CustomerService {
         .join('\n');
     }
 
-    alert(alertMessage); 
+    alert(alertMessage); //New Custom Popups
     return throwError(() => new Error(errorMessage));
   }
 
-  getCustomers(): Observable<any> {
+  private getAuthHeaders(): HttpHeaders {
     const token = this.getToken();
     if (!token) {
+      alert('Authentication required. Redirecting to login.'); 
       throw new Error('Authentication token is missing');
     }
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    return new HttpHeaders().set('Authorization', `Bearer ${token}`);
+  }
+
+  getCustomers(): Observable<any> {
+const headers = this.getAuthHeaders();
     return this.http.get<any>(this.apiUrl, { headers }).pipe(
       catchError(this.handleError)
     );
   }
 
+  getPaginatedCustomers(page: number, pageSize: number): Observable<any> {
+    const headers = this.getAuthHeaders();
+    return this.http.get<any>(`${this.apiUrl}?page=${page}&size=${pageSize}`, { headers }).pipe(
+      catchError(this.handleError)
+    );
+  }
+  
+
   getCustomerById(id: string): Observable<any> {
-    const token = this.getToken();
-    if (!token) {
-      throw new Error('Authentication token is missing');
-    }
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    const headers = this.getAuthHeaders();
     return this.http.get<any>(`${this.apiUrl}/${id}`, { headers }).pipe(
       catchError(this.handleError)
     );
   }
 
   createCustomer(customer: any): Observable<any> {
-    const token = this.getToken();
-    if (!token) {
-      throw new Error('Authentication token is missing');
-    }
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    const headers = this.getAuthHeaders();
     return this.http.post<any>(this.apiUrl, customer, { headers }).pipe(
       catchError(this.handleError) 
     );
   }
 
   updateCustomer(id: string, customer: any): Observable<any> {
-    const token = this.getToken();
-    if (!token) {
-      throw new Error('Authentication token is missing');
-    }
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    const headers = this.getAuthHeaders();
     return this.http.put<any>(`${this.apiUrl}/${id}`, customer, { headers }).pipe(
       catchError(this.handleError) 
     );
   }
 
   deleteCustomer(id: string): Observable<any> {
-    const token = this.getToken();
-    if (!token) {
-      throw new Error('Authentication token is missing');
-    }
-    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+    const headers = this.getAuthHeaders();
     return this.http.delete<any>(`${this.apiUrl}/${id}`, { headers }).pipe(
       catchError(this.handleError) 
     );
   }
 
   sendEmail(customerId: string, payload: any): Observable<any> {
-    const token = this.getToken();
-    if (!token) {
-      throw new Error('Authentication token is missing');
-    }
-    
-    let headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
-    
+    let headers = this.getAuthHeaders();
     headers = headers.set('Content-Type', 'application/x-www-form-urlencoded');
     
     return this.http.post(

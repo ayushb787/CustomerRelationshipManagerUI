@@ -18,8 +18,8 @@ export class LeadListComponent implements OnInit {
   leads: Lead[] = [];
   loading = true;
   token: string | null = '';
-  pageSize = 100;
-  pageIndex = 1;
+  pageSize = 10;
+  pageIndex = 0;
   total = 0;
   customers: any[] = [];
   users: any[] = [];
@@ -28,13 +28,13 @@ export class LeadListComponent implements OnInit {
     private leadService: LeadService,
     private router: Router,
     private customerService: CustomerService, 
-    private datePipe: DatePipe  // Inject DatePipe here
+    private datePipe: DatePipe   
   ) { }
 
   ngOnInit(): void {
     this.token = localStorage.getItem('token');
     if (this.token) {
-      this.loadLeads();
+      this.getPaginatedLeads();
       this.loadCustomers();
       this.loadUsers();
     } else {
@@ -42,6 +42,7 @@ export class LeadListComponent implements OnInit {
     }
   }
 
+  //old function 
   loadLeads(): void {
     this.loading = true;
     if (this.token) {
@@ -58,11 +59,31 @@ export class LeadListComponent implements OnInit {
       );
     }
   }
+//new function with pagination
+  getPaginatedLeads(): void {
+    this.loading = true;
+    if (this.token) {
+      this.leadService.getPaginatedLeads(this.pageIndex, this.pageSize).subscribe(
+        (response: any) => { 
+          console.log(response);
+          this.leads = response.data.content || [];   
+          this.total = response.data.page.totalPages || 0; 
+          console.log(this.customers);
+          this.loading = false;
+        },
+        (error) => {
+          alert('Error fetching paginated leads');
+          console.error('Error fetching paginated leads', error);
+          this.loading = false;
+        }
+      );
+    }
+  }
 
   loadCustomers(): void {
     this.customerService.getCustomers().subscribe(
-      (data: any) => {
-        this.customers = data.data;
+      (response: any) => {
+        this.customers = response.data.content;
       },
       (error) => {
         console.error('Error fetching customers:', error);
@@ -114,6 +135,21 @@ export class LeadListComponent implements OnInit {
           this.loadLeads();
         });
       }
+    }
+  }
+
+  onPreviousPage(): void {
+    if (this.pageIndex > 0) {
+      this.pageIndex--;
+      this.getPaginatedLeads();
+    }
+  }
+  
+  onNextPage(): void { 
+    const maxPage = Math.ceil(this.total / this.pageSize);
+    if (this.pageIndex < maxPage-1) {
+      this.pageIndex++;
+      this.getPaginatedLeads();
     }
   }
 }

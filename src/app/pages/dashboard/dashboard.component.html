@@ -18,7 +18,7 @@
           [queryParams]="{replace: true}" 
           *ngIf="isAdmin">
           <i class="fas fa-plus-circle text-xl"></i>
-          <span>Create Lead</span>
+          <span>Add Lead</span>
         </button>
       </div>
     </nz-card>
@@ -37,7 +37,7 @@
           [routerLink]="['/dashboard/customers/create']" 
           [queryParams]="{replace: true}">
           <i class="fas fa-plus-circle text-xl"></i>
-          <span>Create Customer</span>
+          <span>Add New Customer</span>
         </button>
       </div>
     </nz-card>
@@ -66,7 +66,28 @@
             [routerLink]="['/dashboard/tasks/create']" 
             [queryParams]="{replace: true}">
             <i class="fas fa-plus-circle text-xl"></i>
-            <span>Create Task</span>
+            <span>Add New Task</span>
+          </button>
+        </ng-container>
+      </div>
+    </nz-card>
+
+    <nz-card *ngIf="isAdmin" nzTitle="Performance" class="shadow-lg p-4 rounded-lg bg-white border border-gray-200">
+      <div class="flex flex-col space-y-4"> 
+        <ng-container *ngIf="isAdmin">
+          <button 
+            class="btn bg-purple-500 text-white hover:bg-purple-600 rounded-lg px-4 py-3 flex items-center justify-center space-x-2 transition duration-300"
+            [routerLink]="['/dashboard/performance']" 
+            [queryParams]="{replace: true}">
+            <i class="fas fa-chart-bar text-xl"></i>
+            <span>View Performance</span>
+          </button>
+          <button 
+            class="btn bg-amber-500 text-white hover:bg-amber-600 rounded-lg px-4 py-3 flex items-center justify-center space-x-2 transition duration-300"
+            [routerLink]="['/dashboard/performance/create']" 
+            [queryParams]="{replace: true}">
+            <i class="fas fa-plus-circle text-xl"></i>
+            <span>Add Performance</span>
           </button>
         </ng-container>
       </div>
