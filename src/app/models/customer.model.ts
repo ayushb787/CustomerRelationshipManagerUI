@@ -3,7 +3,6 @@ export interface Customer {
     name: string;
     email: string;
     phone: string;
-    address: string;
-    // Add other properties as necessary
+    address: string; 
   }
   
