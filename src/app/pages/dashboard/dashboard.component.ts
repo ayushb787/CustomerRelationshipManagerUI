@@ -5,11 +5,12 @@ import { NavbarComponent } from '../../shared/navbar/navbar.component';
 import { Router, RouterModule } from '@angular/router';
 import { PerformanceMetricsCreateComponent } from "../../performance/performance-create/performance-create.component";
 import { AlertNotificationService } from '../../services/alert-notification.service';
+import { PerformanceGraphsComponent } from "../../performance/performance-graphs/performance-graphs.component";
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, NzCardComponent, NavbarComponent, RouterModule, PerformanceMetricsCreateComponent],
+  imports: [CommonModule, NzCardComponent, NavbarComponent, RouterModule, PerformanceMetricsCreateComponent, PerformanceGraphsComponent],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css'
 })

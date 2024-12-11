@@ -58,7 +58,7 @@ export class PerformanceMetricsCreateComponent implements OnInit {
       () => {
         this.isLoading = false; 
         this.alert.alertNotification('Performance metric added successfully', 'success'); 
-        this.router.navigate(['/performance'], { replaceUrl: true });
+        this.router.navigate(['/dashboard/performance'], { replaceUrl: true });
       },
       (error) => {
         this.isLoading = false; 

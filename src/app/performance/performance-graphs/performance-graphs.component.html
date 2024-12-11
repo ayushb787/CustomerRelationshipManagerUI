@@ -1,57 +1,17 @@
-<!-- <div class="container mx-auto p-4"> -->
-    User-wise Performance
-    <!-- <div class="shadow-lg rounded-lg bg-white p-4 mb-6"> -->
-      <!-- <h3 class="text-lg font-semibold mb-2">User-wise Performance</h3> -->
-      <!-- <div style="position: relative; height: 300px;"> -->
-        <!-- <div *ngIf="userWiseChartData.datasets.length"> -->
-            <!-- <canvas baseChart -->
-                    <!-- [data]="userWiseChartData" -->
-                    <!-- [options]="userWiseChartOptions" -->
-                    <!-- [type]="'bar'"> -->
-            <!-- </canvas> -->
-          <!-- </div> -->
-<!--            -->
-          <!-- <div *ngIf="dateWiseChartData.datasets.length"> -->
-            <!-- <canvas baseChart -->
-                    <!-- [data]="dateWiseChartData" -->
-                    <!-- [options]="dateWiseChartOptions" -->
-                    <!-- [type]="'line'"> -->
-            <!-- </canvas> -->
-          <!-- </div> -->
-<!--            -->
-          <!-- <div *ngIf="metricTypeWiseChartData.datasets.length"> -->
-            <!-- <canvas baseChart -->
-                    <!-- [data]="metricTypeWiseChartData" -->
-                    <!-- [options]="metricTypeWiseChartOptions" -->
-                    <!-- [type]="'pie'"> -->
-            <!-- </canvas> -->
-          <!-- </div> -->
-<!--            -->
-      <!-- </div> -->
-    <!-- </div> -->
-<!--    -->
-    Date-wise Performance
-    <!-- <div class="shadow-lg rounded-lg bg-white p-4 mb-6"> -->
-      <!-- <h3 class="text-lg font-semibold mb-2">Date-wise Performance</h3> -->
-      <!-- <div style="position: relative; height: 300px;"> -->
-        <!-- <!-- <canvas baseChart -->
-                <!-- [data]="dateWiseChartData" -->
-                <!-- [options]="dateWiseChartOptions" -->
-                <!-- [type]="'line'"> -->
-        <!-- </canvas> --> -->
-      <!-- </div> -->
-    <!-- </div> -->
-<!--    -->
-    Metric Type-wise Performance
-    <!-- <div class="shadow-lg rounded-lg bg-white p-4 mb-6"> -->
-      <!-- <h3 class="text-lg font-semibold mb-2">Metric Type-wise Performance</h3> -->
-      <!-- <div style="position: relative; height: 300px;"> -->
-        <!-- <!-- <canvas baseChart -->
-                <!-- [data]="metricTypeWiseChartData" -->
-                <!-- [options]="metricTypeWiseChartOptions" -->
-                <!-- [type]="'pie'"> -->
-        <!-- </canvas> --> -->
-      <!-- </div> -->
-    <!-- </div> -->
-  <!-- </div> -->
-<!--  -->
+<div class="container mx-auto p-6">
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+    <div *ngFor="let chart of charts" class="bg-white p-6 rounded-lg shadow-lg border border-gray-200">
+      <h3 class="text-xl font-semibold text-center mb-4">{{ chart.metricType }}</h3>
+      <div class="max-w-full overflow-hidden">
+        <apx-chart
+          [series]="chart.chartOptions.series"
+          [chart]="chart.chartOptions.chart"
+          [xaxis]="chart.chartOptions.xaxis"
+          [dataLabels]="chart.chartOptions.dataLabels"
+          [title]="chart.chartOptions.title"
+          
+        ></apx-chart>
+      </div>
+    </div>
+  </div>
+</div>

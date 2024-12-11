@@ -41,7 +41,7 @@ export const routes: Routes = [
   { path: 'dashboard/tasks/:id', component: TaskEditComponent, canActivate: [AuthGuard] },
   { path: 'dashboard/performance/create', component: PerformanceMetricsCreateComponent, canActivate: [AuthGuard] },
   { path: 'dashboard/performance', component: PerformanceMetricsListComponent, canActivate: [AuthGuard] },
-  // { path: 'dashboard/performance/graphs', component: PerformanceGraphsComponent, canActivate: [AuthGuard] },
+  { path: 'dashboard/performance/graphs', component: PerformanceGraphsComponent, canActivate: [AuthGuard] },
   // { path: 'dashboard/performance/:id', component: PerformanceMetricsUpdateComponent, canActivate: [AuthGuard] },
   {path: 'dashboard/notification', component: NotificationViewComponent, canActivate: [AuthGuard]},
   { path: '', redirectTo: '/login', pathMatch: 'full' }  

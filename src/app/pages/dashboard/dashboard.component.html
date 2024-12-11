@@ -1,91 +1,97 @@
 <app-navbar></app-navbar>
 <div class="p-6 bg-gray-50 min-h-screen">
-  <h1 class="text-3xl font-bold text-center md:text-left mb-6 text-gray-800">Dashboard</h1>
+  <div class="text-center mb-5">
+    <h1 class="text-3xl font-extrabold text-gray-800">Dashboard</h1>
+    <p class="text-lg text-gray-600 mt-2">Empowering Connections, Driving Success</p>
+  </div>
 
-  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"> 
+
+  <div class="bg-white shadow-lg rounded-lg p-6">
+    <h2 class="text-2xl font-semibold text-gray-700">Performance Graph</h2>
+    <!-- Placeholder for performance graph -->
+    <div class="mt-4 w-full  bg-gray-50 rounded-lg">
+      <app-performance-graphs></app-performance-graphs>
+    </div>
+  </div>
+
+  <div class="text-center mb-10 mt-10">
+    <h1 class="text-3xl font-extrabold text-gray-800">Quick Nav</h1>
+    <p class="text-lg text-gray-600 mt-2">Overview of your leads, customers, tasks, and performance</p>
+  </div>
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
     <nz-card nzTitle="Leads" class="shadow-lg p-4 rounded-lg bg-white border border-gray-200">
       <div class="flex flex-col space-y-4">
-        <button 
+        <button
           class="btn bg-blue-500 text-white hover:bg-blue-600 rounded-lg px-4 py-3 flex items-center justify-center space-x-2 transition duration-300"
-          [routerLink]="['/dashboard/leads']" 
-          [queryParams]="{replace: true}">
+          [routerLink]="['/dashboard/leads']" [queryParams]="{replace: true}">
           <i class="fas fa-leaf text-xl"></i>
           <span>View Leads</span>
         </button>
-        <button 
+        <button
           class="btn bg-green-500 text-white hover:bg-green-600 rounded-lg px-4 py-3 flex items-center justify-center space-x-2 transition duration-300"
-          [routerLink]="['/dashboard/leads/create']" 
-          [queryParams]="{replace: true}" 
-          *ngIf="isAdmin">
+          [routerLink]="['/dashboard/leads/create']" [queryParams]="{replace: true}" *ngIf="isAdmin">
           <i class="fas fa-plus-circle text-xl"></i>
           <span>Add Lead</span>
         </button>
       </div>
     </nz-card>
- 
+  
     <nz-card nzTitle="Customers" class="shadow-lg p-4 rounded-lg bg-white border border-gray-200">
       <div class="flex flex-col space-y-4">
-        <button 
+        <button
           class="btn bg-teal-500 text-white hover:bg-teal-600 rounded-lg px-4 py-3 flex items-center justify-center space-x-2 transition duration-300"
-          [routerLink]="['/dashboard/customers']" 
-          [queryParams]="{replace: true}">
+          [routerLink]="['/dashboard/customers']" [queryParams]="{replace: true}">
           <i class="fas fa-user-friends text-xl"></i>
           <span>View Customers</span>
         </button>
-        <button 
+        <button
           class="btn bg-orange-500 text-white hover:bg-orange-600 rounded-lg px-4 py-3 flex items-center justify-center space-x-2 transition duration-300"
-          [routerLink]="['/dashboard/customers/create']" 
-          [queryParams]="{replace: true}">
+          [routerLink]="['/dashboard/customers/create']" [queryParams]="{replace: true}">
           <i class="fas fa-plus-circle text-xl"></i>
           <span>Add New Customer</span>
         </button>
       </div>
     </nz-card>
- 
+  
     <nz-card nzTitle="Tasks" class="shadow-lg p-4 rounded-lg bg-white border border-gray-200">
       <div class="flex flex-col space-y-4">
         <ng-container *ngIf="!isAdmin">
-          <button 
+          <button
             class="btn bg-purple-500 text-white hover:bg-purple-600 rounded-lg px-4 py-3 flex items-center justify-center space-x-2 transition duration-300"
-            [routerLink]="['/dashboard/tasks']" 
-            [queryParams]="{replace: true}">
+            [routerLink]="['/dashboard/tasks']" [queryParams]="{replace: true}">
             <i class="fas fa-tasks text-xl"></i>
             <span>View Tasks</span>
           </button>
         </ng-container>
         <ng-container *ngIf="isAdmin">
-          <button 
+          <button
             class="btn bg-purple-500 text-white hover:bg-purple-600 rounded-lg px-4 py-3 flex items-center justify-center space-x-2 transition duration-300"
-            [routerLink]="['/dashboard/all-tasks']" 
-            [queryParams]="{replace: true}">
+            [routerLink]="['/dashboard/all-tasks']" [queryParams]="{replace: true}">
             <i class="fas fa-tasks text-xl"></i>
             <span>View All Tasks</span>
           </button>
-          <button 
+          <button
             class="btn bg-amber-500 text-white hover:bg-amber-600 rounded-lg px-4 py-3 flex items-center justify-center space-x-2 transition duration-300"
-            [routerLink]="['/dashboard/tasks/create']" 
-            [queryParams]="{replace: true}">
+            [routerLink]="['/dashboard/tasks/create']" [queryParams]="{replace: true}">
             <i class="fas fa-plus-circle text-xl"></i>
             <span>Add New Task</span>
           </button>
         </ng-container>
       </div>
     </nz-card>
-
+  
     <nz-card *ngIf="isAdmin" nzTitle="Performance" class="shadow-lg p-4 rounded-lg bg-white border border-gray-200">
-      <div class="flex flex-col space-y-4"> 
+      <div class="flex flex-col space-y-4">
         <ng-container *ngIf="isAdmin">
-          <button 
+          <button
             class="btn bg-purple-500 text-white hover:bg-purple-600 rounded-lg px-4 py-3 flex items-center justify-center space-x-2 transition duration-300"
-            [routerLink]="['/dashboard/performance']" 
-            [queryParams]="{replace: true}">
+            [routerLink]="['/dashboard/performance']" [queryParams]="{replace: true}">
             <i class="fas fa-chart-bar text-xl"></i>
             <span>View Performance</span>
           </button>
-          <button 
+          <button
             class="btn bg-amber-500 text-white hover:bg-amber-600 rounded-lg px-4 py-3 flex items-center justify-center space-x-2 transition duration-300"
-            [routerLink]="['/dashboard/performance/create']" 
-            [queryParams]="{replace: true}">
+            [routerLink]="['/dashboard/performance/create']" [queryParams]="{replace: true}">
             <i class="fas fa-plus-circle text-xl"></i>
             <span>Add Performance</span>
           </button>
@@ -93,4 +99,5 @@
       </div>
     </nz-card>
   </div>
-</div> 
+
+</div>

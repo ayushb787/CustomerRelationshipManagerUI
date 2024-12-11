@@ -1,176 +1,183 @@
 import { Component, OnInit } from '@angular/core';
+import { ApexAxisChartSeries, ApexChart, ApexDataLabels, ApexXAxis, ApexTitleSubtitle, ApexTooltip, NgApexchartsModule } from 'ng-apexcharts';
 import { PerformanceService } from '../../services/performance.service';
-import { ChartData, ChartOptions } from 'chart.js';
-import { ChartsModule } from 'ng-charts'; // Ensure this module is compatible with standalone components
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { BaseChartDirective  } from 'ng2-charts';
-import { PieController, ArcElement, Tooltip, Legend } from 'chart.js';
-import { AlertNotificationService } from '../../services/alert-notification.service';
+import { DatePipe } from '@angular/common';
+import { LeadService } from '../../services/lead.service';
 
+interface PerformanceMetric {
+  metricId: number;
+  userId: number;
+  metricType: string;
+  value: number;
+  date: string;
+  remarks: string;
+}
+
+interface GroupedData {
+  userId: number;
+  totalValue: number;
+}
 
 @Component({
-  selector: 'app-performance-graphs', 
+  selector: 'app-performance-graphs',
   standalone: true,
-  imports:[FormsModule, CommonModule],
+  imports: [NgApexchartsModule, CommonModule, FormsModule],
   templateUrl: './performance-graphs.component.html',
+  providers: [DatePipe],
+  styleUrls: ['./performance-graphs.component.css'],
 })
 export class PerformanceGraphsComponent implements OnInit {
-  userWiseChartData: ChartData<'bar'> = { datasets: [] };
-  dateWiseChartData: ChartData<'line'> = { datasets: [] };
-  metricTypeWiseChartData: ChartData<'pie'> = { datasets: [] };
+  public charts: {
+    metricType: string;
+    chartOptions: {
+      series: ApexAxisChartSeries;
+      chart: ApexChart;
+      xaxis: ApexXAxis;
+      dataLabels: ApexDataLabels;
+      title: ApexTitleSubtitle;
+      tooltip: ApexTooltip;
+    };
+  }[] = [];
 
-  userWiseChartLabels: string[] = [];
-  dateWiseChartLabels: string[] = [];
-  metricTypeWiseChartLabels: string[] = [];
+  public users: { userId: number; username: string }[] = [];
 
-  userWiseChartOptions: ChartOptions = {
-    responsive: true,
-    scales: {
-      x: {
-        title: {
-          display: true,
-          text: 'User',
-        },
-      },
-      y: {
-        title: {
-          display: true,
-          text: 'Performance Value',
-        },
-      },
-    },
-  };
-
-  dateWiseChartOptions: ChartOptions = {
-    responsive: true,
-    scales: {
-      x: {
-        title: {
-          display: true,
-          text: 'Date',
-        },
-      },
-      y: {
-        title: {
-          display: true,
-          text: 'Performance Value',
-        },
-      },
-    },
-  };
-
-  metricTypeWiseChartOptions: ChartOptions = {
-    responsive: true,
-    plugins: {
-      tooltip: {
-        callbacks: {
-          label: (tooltipItem) => `${tooltipItem.label}: ${tooltipItem.raw} units`,
-        },
-      },
-    },
-  };
-
-  constructor(private performanceMetricsService: PerformanceService,
-    private alert: AlertNotificationService,) {}
+  constructor(
+    private performanceMetricsService: PerformanceService,
+    private datePipe: DatePipe,
+    private leadService: LeadService
+  ) {}
 
   ngOnInit(): void {
-    this.loadChartData();
+    this.loadUsers();
+    this.loadDataAndPrepareCharts();
   }
 
-  loadChartData(): void {
-    this.loadUserWiseData();
-    this.loadDateWiseData();
-    this.loadMetricTypeWiseData();
-  }
-
-  loadUserWiseData(): void {
-    this.performanceMetricsService.getPerformances().subscribe(
-      (data) => { 
-        const groupedByUser = this.groupBy(data.data, 'userId');
-        this.userWiseChartLabels = Object.keys(groupedByUser);
-        this.userWiseChartData = {
-          labels: this.userWiseChartLabels,
-          datasets: [
-            {
-              data: this.userWiseChartLabels.map(
-                (userId) => this.aggregatePerformance(groupedByUser[userId])
-              ),
-              label: 'Performance by User',
-              backgroundColor: '#6394f9',
-            },
-          ],
-        }; 
+  loadUsers(): void {
+    this.leadService.getUsers().subscribe(
+      (data: any) => {
+        console.log(data);
+        this.users = data.data;
       },
-      (error) => { 
-        this.alert.alertNotification('Error loading user-wise data', 'error'); 
-      }
-    );
-  }
-  
-
-  loadDateWiseData(): void {
-    this.performanceMetricsService.getPerformances().subscribe(
-      (data) => { 
-        const groupedByDate = this.groupBy(data.data, 'date');
-        this.dateWiseChartLabels = Object.keys(groupedByDate);
-        this.dateWiseChartData = {
-          labels: this.dateWiseChartLabels,
-          datasets: [
-            {
-              data: this.dateWiseChartLabels.map(
-                (date) => this.aggregatePerformance(groupedByDate[date])
-              ),
-              label: 'Performance by Date',
-              borderColor: '#62daaa',
-              backgroundColor: 'rgba(98, 218, 170, 0.2)',
-              fill: true,
-            },
-          ],
-        };
-      },
-      (error) => { 
-        this.alert.alertNotification('Error loading date-wise data', 'error'); 
+      (error) => {
+        console.error('Error fetching users:', error);
       }
     );
   }
 
-  loadMetricTypeWiseData(): void {
+  getAssignedUsername(userId: number): string {
+    const user = this.users.find(u => u.userId === userId);
+    return user ? user.username : 'Unknown User';
+  }
+
+  loadDataAndPrepareCharts(): void {
     this.performanceMetricsService.getPerformances().subscribe(
-      (data) => {
-        const groupedByMetricType = this.groupBy(data.data, 'metricType');
-        this.metricTypeWiseChartLabels = Object.keys(groupedByMetricType);
-        this.metricTypeWiseChartData = {
-          labels: this.metricTypeWiseChartLabels,
-          datasets: [
-            {
-              data: this.metricTypeWiseChartLabels.map(
-                (metricType) => this.aggregatePerformance(groupedByMetricType[metricType])
-              ),
-              label: 'Metric Type Performance',
-              backgroundColor: ['#6394f9', '#62daaa', '#ff6347', '#ffcc00', '#90ee90'],
-            },
-          ],
-        };
+      (response: { success: boolean; data: PerformanceMetric[]; message: string }) => {
+        if (response.success) {
+          const metrics = response.data;
+
+          const groupedByMetric = this.groupByMetricTypeAndDate(metrics);
+
+          this.charts = Object.keys(groupedByMetric).map((metricType) => {
+            const groupedData = groupedByMetric[metricType];
+
+            const series = this.prepareChartSeries(groupedData);
+
+            return {
+              metricType,
+              chartOptions: {
+                series: series,
+                chart: {
+                  type: 'bar',
+                  height: 350,
+                  stacked: true,
+                  toolbar: {
+                    show: true,
+                  },
+                },
+                xaxis: {
+                  categories: this.getUniqueDates(groupedData),
+                },
+                dataLabels: {
+                  enabled: true,
+                },
+                title: {
+                  text: `Performance Over Time`,
+                  align: 'center',
+                },
+                tooltip: {
+                  shared: true,
+                  intersect: false,
+                  y: {
+                    formatter: (val: number) => val.toFixed(0),
+                  },
+                  custom: ({ series, seriesIndex, dataPointIndex, w }: any) => {
+                    const username = w.config.series[seriesIndex].name;
+                    return `<div><strong>${username}</strong>: ${w.config.series[seriesIndex].data[dataPointIndex]}</div>`;
+                  },
+                },
+              },
+            };
+          });
+        } else {
+          console.error('Failed to load performance data:', response.message);
+        }
       },
-      (error) => { 
-        this.alert.alertNotification('Error loading metric-type wise data', 'error'); 
+      (error) => {
+        console.error('Error fetching performance data:', error);
       }
     );
   }
 
-  groupBy(array: any[], key: string): { [key: string]: any[] } {
-    return array.reduce((result, currentValue) => {
-      const groupKey = currentValue[key];
-      if (!result[groupKey]) {
-        result[groupKey] = [];
+  private groupByMetricTypeAndDate(metrics: PerformanceMetric[]): Record<string, Record<string, GroupedData[]>> {
+    const grouped: Record<string, Record<string, GroupedData[]>> = {};
+
+    metrics.forEach((metric) => {
+      const { metricType, date, userId, value } = metric;
+
+      if (!grouped[metricType]) {
+        grouped[metricType] = {};
       }
-      result[groupKey].push(currentValue);
-      return result;
-    }, {});
+
+      if (!grouped[metricType][date]) {
+        grouped[metricType][date] = [];
+      }
+
+      const existing = grouped[metricType][date].find((data) => data.userId === userId);
+
+      if (existing) {
+        existing.totalValue += value;
+      } else {
+        grouped[metricType][date].push({
+          userId,
+          totalValue: value,
+        });
+      }
+    });
+
+    return grouped;
   }
 
-  aggregatePerformance(entries: any[]): number {
-    return entries.reduce((total, entry) => total + entry.value, 0);
+  private prepareChartSeries(groupedData: Record<string, GroupedData[]>): ApexAxisChartSeries {
+    const series = this.users.map((user) => {
+      const username = user.username;  
+      return {
+        name: username,  
+        data: Object.keys(groupedData).map((date) => {
+          const userData = groupedData[date].find((data) => data.userId === user.userId);
+          return userData ? userData.totalValue : 0;
+        }),
+      };
+    });
+
+    return series;
+  }
+
+  private getUniqueDates(groupedData: Record<string, GroupedData[]>): string[] {
+    const dates = Array.from(new Set(Object.keys(groupedData)));
+    return dates
+      .map((date) => this.datePipe.transform(date, 'MMM dd, y') || '')
+      .filter((date) => date);
   }
 }
