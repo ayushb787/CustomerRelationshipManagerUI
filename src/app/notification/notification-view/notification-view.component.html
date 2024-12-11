@@ -1,19 +1,21 @@
-<div class="relative z-50"> 
-    <button
-      class="relative"
-      (mouseenter)="toggleNotifications(true)" 
-      (mouseleave)="toggleNotifications(false)"
+<div class="relative z-50">
+  <button 
+    class="relative"
+    (mouseenter)="toggleNotifications(true)" 
+    (mouseleave)="toggleNotifications(false)"
+  >
+    
+    <i class="fas fa-bell text-2xl text-yellow-500"></i>
+    <span
+      
+      class="absolute top-0 right-0 bg-red-500 text-white text-xs rounded-full h-4 w-4 flex items-center justify-center"
     >
-      <i nz-icon nzType="bell" nzTheme="outline"></i>
-      <span
-        *ngIf="getUnreadCount() > 0"
-        class="absolute top-0 right-0 bg-red-500 text-white text-xs rounded-full h-4 w-4 flex items-center justify-center"
-      >
-        {{ getUnreadCount() }}
-      </span>
-      <div
-      *ngIf="showNotifications"
-      class="absolute left-0 mt-2 w-96 bg-white border border-gray-300 shadow-lg rounded-lg"
+      {{ getUnreadCount() }}
+    </span>
+    
+    <div
+      *ngIf="showNotifications && getUnreadCount() > 0"
+      class="absolute right-0 -mt-1 w-96 bg-white border border-gray-300 shadow-lg rounded-lg"
       (mouseenter)="toggleNotifications(true)" 
       (mouseleave)="toggleNotifications(false)"
     >
@@ -29,7 +31,7 @@
             *ngFor="let notification of notifications"
             class="p-4 border-b border-gray-200 flex justify-between items-center"
             [class.bg-gray-100]="!notification.readStatus"
-          > 
+          >
             <div>
               <p>{{ notification.message }}</p>
               <p class="text-xs text-gray-500">{{ notification.dateSent | date:'medium' }}</p>
@@ -45,7 +47,5 @@
         </ul>
       </div>
     </div>
-    </button> 
-   
-  </div>
-  
+  </button> 
+</div>
