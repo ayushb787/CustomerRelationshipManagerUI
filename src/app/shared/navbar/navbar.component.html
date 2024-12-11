@@ -23,6 +23,9 @@
       <li nz-menu-item [nzSelected]="isAdmin && isPerformanceSelected" routerLink="/dashboard/performance" *ngIf="isAdmin">
         <a class="hover:text-indigo-600">Performance</a>
       </li>
+      <li nz-menu-item [nzSelected]="isAdmin && isSignupSelected" routerLink="/signup" *ngIf="isAdmin">
+        <a class="hover:text-indigo-600">Add User</a>
+      </li>
     </ul>
   </div>
    
