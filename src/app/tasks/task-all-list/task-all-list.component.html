@@ -4,11 +4,11 @@
     <nz-table [nzData]="tasks" [nzLoading]="loading" [nzBordered]="true" [nzShowPagination]="false">
       <thead>
         <tr>
-          <th nzColumnKey="taskId" [nzSortFn]="true" [nzSortPriority]="true">Task</th>
+          <th nzColumnKey="taskId">Task</th>
           <th nzColumnKey="assignedTo">Assigned To</th>
-          <th nzColumnKey="status" [nzFilterFn]="false">Status</th>
-          <th nzColumnKey="priority" [nzFilterFn]="false">Priority</th>
-          <th nzColumnKey="dueDate" [nzFilterFn]="false">Due Date</th>
+          <th nzColumnKey="status">Status</th>
+          <th nzColumnKey="priority">Priority</th>
+          <th nzColumnKey="dueDate">Due Date</th>
           <th nzColumnKey="action">Actions</th>
         </tr>
       </thead>
@@ -19,12 +19,10 @@
           <td>{{ task.status }}</td>
           <td>{{ task.priority }}</td>
           <td>{{ formatDate(task.dueDate) }}</td>
-          <td class="px-4 py-2 text-start space-x-5">
-            <!-- Edit Button -->
+          <td class="px-4 py-2 text-start space-x-5"> 
             <button class="text-blue-500 hover:text-blue-700" (click)="editTask(task.taskId)">
               <i class="fas fa-edit"></i>
-            </button>
-            <!-- Delete Button -->
+            </button> 
             <button class="text-red-500 hover:text-red-700" (click)="deleteTask(task.taskId)">
               <i class="fas fa-trash-alt"></i>
             </button>

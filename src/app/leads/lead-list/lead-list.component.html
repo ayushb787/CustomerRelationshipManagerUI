@@ -9,12 +9,12 @@
     >
       <thead>
         <tr>
-          <th nzColumnKey="customerId" [nzSortFn]="true" [nzSortPriority]="true">Customer</th>
+          <th nzColumnKey="customerId">Customer</th>
           <th nzColumnKey="assignedTo">Assigned To</th>
-          <th nzColumnKey="status" [nzFilterFn]="false">Status</th>
-          <th nzColumnKey="pipelineStage" [nzFilterFn]="false">Pipeline Stage</th>
-          <th nzColumnKey="dateCreated" [nzFilterFn]="false">Date Created</th>
-          <th nzColumnKey="lastUpdated" [nzFilterFn]="false">Last Updated</th>
+          <th nzColumnKey="status">Status</th>
+          <th nzColumnKey="pipelineStage">Pipeline Stage</th>
+          <th nzColumnKey="dateCreated">Date Created</th>
+          <th nzColumnKey="lastUpdated">Last Updated</th>
           <th nzColumnKey="action">Actions</th>
         </tr>
       </thead>
@@ -40,8 +40,7 @@
           </td>
         </tr>
       </tbody>
-    </nz-table>
-    <!-- Custom Pagination Buttons -->
+    </nz-table> 
     <div class="flex justify-end mt-4 space-x-4">
       <button 
         class="px-4 py-2 bg-gray-200 rounded-md text-gray-800 hover:bg-gray-300"

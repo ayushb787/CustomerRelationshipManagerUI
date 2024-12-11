@@ -4,11 +4,11 @@
     <nz-table [nzData]="tasks" [nzLoading]="loading" [nzBordered]="true" [nzShowPagination]="false">
       <thead>
         <tr>
-          <th nzColumnKey="taskId" [nzSortFn]="true" [nzSortPriority]="true">Task</th>
+          <th nzColumnKey="taskId">Task</th>
           <th nzColumnKey="assignedTo">Assigned To</th>
-          <th nzColumnKey="status" [nzFilterFn]="false">Status</th>
-          <th nzColumnKey="priority" [nzFilterFn]="false">Priority</th>
-          <th nzColumnKey="dueDate" [nzFilterFn]="false">Due Date</th>
+          <th nzColumnKey="status">Status</th>
+          <th nzColumnKey="priority">Priority</th>
+          <th nzColumnKey="dueDate">Due Date</th>
           <th nzColumnKey="action">Actions</th>
         </tr>
       </thead>

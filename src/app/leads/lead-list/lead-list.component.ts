@@ -43,31 +43,15 @@ export class LeadListComponent implements OnInit {
       this.alert.alertNotification('Token is not available', 'error');
     }
   }
-
-  //old function 
-  loadLeads(): void {
-    this.loading = true;
-    if (this.token) {
-      this.leadService.getLeads().subscribe(
-        (data: any) => {
-          this.leads = data.data; 
-          this.loading = false;
-        },
-        (error) => { 
-          this.alert.alertNotification('Error fetching leads', 'error'); 
-          this.loading = false;
-        }
-      );
-    }
-  }
-//new function with pagination
+  
   getPaginatedLeads(): void {
     this.loading = true;
     if (this.token) {
       this.leadService.getPaginatedLeads(this.pageIndex, this.pageSize).subscribe(
         (response: any) => {  
+          console.log(response);
           this.leads = response.data.content || [];   
-          this.total = response.data.page.totalPages || 0;  
+          this.total = response.data.page.totalElements || 0;  
           this.loading = false;
         },
         (error) => { 
@@ -113,13 +97,7 @@ export class LeadListComponent implements OnInit {
   formatDate(date: string): string {
     return this.datePipe.transform(date, 'MMM d, y, h:mm:ss a') || ''; 
   }
-
-  onQueryParamsChange(params: NzTableQueryParams): void {
-    const { pageIndex, pageSize } = params;
-    this.pageIndex = pageIndex;
-    this.pageSize = pageSize;
-    this.loadLeads();
-  }
+ 
 
   viewLead(leadId: number): void {
     this.router.navigate([`dashboard/leads/${leadId}`], { replaceUrl: true });
@@ -130,7 +108,7 @@ export class LeadListComponent implements OnInit {
       if (confirm('Are you sure you want to delete this lead?')) {
         this.leadService.deleteLead(leadId).subscribe((response) => { 
           this.alert.alertNotification('Customer deleted successfully', 'success');
-          this.loadLeads();
+          this.getPaginatedLeads();
         });
       }
     }

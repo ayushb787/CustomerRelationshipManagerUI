@@ -22,7 +22,7 @@ export class TaskAllListComponent implements OnInit {
   loading = false;
   token: string | null = '';
   total = 0;
-  pageSize = 5;
+  pageSize = 10;
   pageIndex = 0;
   userId = '';
   users: any[] = [];
@@ -47,7 +47,7 @@ export class TaskAllListComponent implements OnInit {
       this.taskService.getAllPaginatedTasks(this.pageIndex, this.pageSize).subscribe(
         (response: any) => {
           this.tasks = response.data.content || [];
-          this.total = response.data.page.totalPages || 0; 
+          this.total = response.data.page.totalElements || 0; 
           this.loading = false;
         },
         (error) => { 
@@ -105,7 +105,7 @@ export class TaskAllListComponent implements OnInit {
 
   onNextPage(): void {
     const maxPage = Math.ceil(this.total / this.pageSize);
-    if (this.pageIndex < maxPage) {
+    if (this.pageIndex < maxPage-1) {
       this.pageIndex++;
       this.getAllPaginatedTasks();
     }

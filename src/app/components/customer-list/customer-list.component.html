@@ -9,9 +9,9 @@
     >
       <thead>
         <tr>
-          <th nzColumnKey="name" [nzSortFn]="true" [nzSortPriority]="true">Name</th>
-          <th nzColumnKey="category" [nzFilters]="filterCategories" [nzFilterFn]="false">Category</th>
-          <th nzColumnKey="preferences" [nzFilters]="filterPreferences" [nzFilterFn]="false">Preference</th>
+          <th nzColumnKey="name" >Name</th>
+          <th nzColumnKey="category" >Category</th>
+          <th nzColumnKey="preferences">Preference</th>
           <th nzColumnKey="email">Email</th>
           <th nzColumnKey="phone">Phone</th>
           <th nzColumnKey="address">Address</th>
@@ -53,7 +53,6 @@
         </tr>
       </tbody>
     </nz-table>
-    <!-- Custom Pagination Buttons -->
     <div class="flex justify-end mt-4 space-x-4">
       <button 
         class="px-4 py-2 bg-gray-200 rounded-md text-gray-800 hover:bg-gray-300"

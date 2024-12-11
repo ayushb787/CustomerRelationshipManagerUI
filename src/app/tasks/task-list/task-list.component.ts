@@ -51,7 +51,7 @@ export class TaskListComponent implements OnInit {
       this.taskService.getPaginatedTasksBySalesperson(this.pageIndex, this.pageSize).subscribe(
         (response: any) => {
           this.tasks = response.data.content || [];
-          this.total = response.data.page.totalPages || 0; 
+          this.total = response.data.page.totalElements || 0; 
           this.loading = false;
         },
         (error) => { 
